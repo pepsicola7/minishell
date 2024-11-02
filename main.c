@@ -1,0 +1,100 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
+/*   Updated: 2024/11/01 19:00:37 by tbartocc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "src.h"
+
+void	print_lexers(t_lexer *tokens)
+{
+	while (tokens)
+	{
+		printf("Token: %s (Type: %d)\n", tokens->value, tokens->type);
+		tokens = tokens->next;
+	}
+}
+
+void	print_parser(t_parser *cmds)
+{
+	int		i;
+	t_lexer	*redir;
+
+	while (cmds)
+	{
+		printf("Command:\n");
+		if (cmds->builtin)
+			printf("  Builtin: Yes\n");
+		else
+			printf("  Builtin: No\n");
+		printf("  Args: ");
+		i = 0;
+		while (cmds->str && cmds->str[i])
+		{
+			printf("[%s] ", cmds->str[i]);
+			i++;
+		}
+		printf("\n");
+		printf("  Redirections:\n");
+		redir = cmds->redirections;
+		while (redir)
+		{
+			printf("    Type: %d, Value: %s\n", redir->type, redir->value);
+			redir = redir->next;
+		}
+		if (cmds->hd_file_name)
+			printf("  Heredoc file: %s\n", cmds->hd_file_name);
+		printf("  Number of redirections: %d\n", cmds->num_redirections);
+		printf("\n");
+		cmds = cmds->next;
+	}
+}
+
+int	main(int ac, char **av, char **initial_env)
+{
+	char		*input;
+	t_lexer		*tokens;
+	t_parser	*cmds;
+	t_env		*env;
+
+	setup_signals();
+	(void)av;
+	if (ac > 1)
+		return (printf("No args needed\n"), 0);
+	env = get_env(initial_env);
+	while (1)
+	{
+		input = readline("minishell> ");
+		if (!input)
+		{
+			printf("exit\n");
+			break ;
+		}
+		add_history(input);
+		tokens = lexer(input, &env);
+		// print_lexers(tokens);
+		cmds = parse_lexer(tokens);
+		print_parser(cmds);
+		free_cmds(cmds);
+		free_tokens(tokens);
+		free(input);
+	}
+	return (0);
+}
+
+// int	main(int ac, char **av)
+// {
+// 	(void)ac;
+// 	int i = -1;
+// 	while (av[i] && av[++i])
+// 	{
+// 		printf("av%d : %s\n", i, av[i]);
+// 	}
+// 	return 0;
+// }
