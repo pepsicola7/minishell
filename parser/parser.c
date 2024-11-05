@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:22:06 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/01 18:37:21 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/04 18:45:48 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_parser	*create_cmd(void)
 	cmd = malloc(sizeof(t_parser));
 	if (!cmd)
 		return (NULL);
-	cmd->str = NULL;
+	cmd->cmd = NULL;
 	cmd->builtin = NULL;
 	cmd->num_redirections = 0;
 	cmd->hd_file_name = NULL;
@@ -45,12 +45,13 @@ void	add_cmd(t_parser **head, t_parser *new_cmd)
 	}
 }
 
-void	add_redirection(t_parser *cmd, t_lexer *redir_token)
+void	add_redirection(t_parser *cmd, int redir_type, char *redir_value)
 {
 	t_lexer	*new_redir;
 	t_lexer	*tmp;
 
-	new_redir = create_token(redir_token->type, redir_token->value);
+	new_redir = create_token(redir_type, redir_value);
+
 	if (!cmd->redirections)
 		cmd->redirections = new_redir;
 	else
@@ -70,7 +71,7 @@ void	add_argument_to_cmd(t_parser *cmd, char *arg)
 	char	**new_args;
 
 	arg_count = 0;
-	while (cmd->str && cmd->str[arg_count])
+	while (cmd->cmd && cmd->cmd[arg_count])
 		arg_count++;
 	new_args = malloc(sizeof(char *) * (arg_count + 2));
 	if (!new_args)
@@ -78,14 +79,14 @@ void	add_argument_to_cmd(t_parser *cmd, char *arg)
 	i = 0;
 	while (i < arg_count)
 	{
-		new_args[i] = cmd->str[i];
+		new_args[i] = cmd->cmd[i];
 		i++;
 	}
-	new_args[arg_count] = strdup(arg);
+	new_args[arg_count] = ft_strdup(arg);
 	new_args[arg_count + 1] = NULL;
-	if (cmd->str)
-		free(cmd->str);
-	cmd->str = new_args;
+	if (cmd->cmd)
+		free(cmd->cmd);
+	cmd->cmd = new_args;
 }
 
 t_parser	*parse_lexer(t_lexer *tokens)
@@ -100,9 +101,13 @@ t_parser	*parse_lexer(t_lexer *tokens)
 		if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT
 			|| tokens->type == HEREDOC || tokens->type == APPEND)
 		{
-			add_redirection(current_cmd, tokens);
+			if (tokens->next)
+			{
+				add_redirection(current_cmd, tokens->type, tokens->next->value);
+				tokens = tokens->next;
+			}
 			tokens = tokens->next;
-			continue ;
+			continue;
 		}
 		if (tokens->type == PIPE)
 		{
@@ -111,7 +116,7 @@ t_parser	*parse_lexer(t_lexer *tokens)
 			tokens = tokens->next;
 			continue ;
 		}
-		if (!current_cmd->str && is_builtin(tokens->value))
+		if (!current_cmd->cmd && is_builtin(tokens->value))
 			current_cmd->builtin = get_builtin_function(tokens->value);
 		add_argument_to_cmd(current_cmd, tokens->value);
 		tokens = tokens->next;

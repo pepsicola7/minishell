@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/01 19:00:37 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:00:21 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	print_parser(t_parser *cmds)
 			printf("  Builtin: No\n");
 		printf("  Args: ");
 		i = 0;
-		while (cmds->str && cmds->str[i])
+		while (cmds->cmd && cmds->cmd[i])
 		{
-			printf("[%s] ", cmds->str[i]);
+			printf("[%s] ", cmds->cmd[i]);
 			i++;
 		}
 		printf("\n");

@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:35:56 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/10/29 15:10:13 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:00:13 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ void	free_cmds(t_parser *cmds)
 	{
 		tmp = cmds;
 		cmds = cmds->next;
-		if (tmp->str)
+		if (tmp->cmd)
 		{
 			i = 0;
-			while (tmp->str[i])
+			while (tmp->cmd[i])
 			{
-				free(tmp->str[i]);
+				free(tmp->cmd[i]);
 				i++;
 			}
-			free(tmp->str);
+			free(tmp->cmd);
 		}
 		free(tmp->hd_file_name);
 		free_tokens(tmp->redirections);

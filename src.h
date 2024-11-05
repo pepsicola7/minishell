@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/01 19:07:00 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:37:38 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_lexer
 
 typedef struct s_parser
 {
-	char			**str;
+	char			**cmd;
 	int				(*builtin)(t_env *, struct s_parser *);
 	int				num_redirections;
 	char			*hd_file_name;
@@ -86,7 +86,13 @@ int			handle_redirection_out(int i, const char *input, t_lexer **tokens);
 int			handle_word(int i, const char *input, t_lexer **tokens/*, t_env **env*/);
 int			is_builtin(char *cmd);
 int			is_special_char(char c);
+int			my_cd(t_env *env, struct s_parser *parser);
+int			my_echo(t_env *env, struct s_parser *parser);
 int			my_env(t_env *env, struct s_parser *parser);
+int			my_exit(t_env *env, struct s_parser *parser);
+int			my_export(t_env *env, struct s_parser *parser);
+int			my_pwd(t_env *env, struct s_parser *parser);
+int			my_unset(t_env *env, struct s_parser *parser);
 t_parser	*parse_lexer(t_lexer *tokens);
 char		*replace_env_variables(const char *input, t_env *env);
 void		setup_signals(void);

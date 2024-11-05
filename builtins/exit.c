@@ -6,8 +6,16 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/01 18:14:00 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/04 14:31:28 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
+
+int	my_exit(t_env *env, t_parser *parser)
+{
+	(void)env;
+	(void)parser;
+	printf("exit\n");
+	exit(0);
+}
