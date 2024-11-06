@@ -6,7 +6,7 @@
 #    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 14:34:27 by tbartocc          #+#    #+#              #
-#    Updated: 2024/10/30 14:21:05 by tbartocc         ###   ########.fr        #
+#    Updated: 2024/11/06 19:07:54 by tbartocc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRC =	ft_atoi.c \
 	ft_strdup.c \
 	ft_striteri.c \
 	ft_strjoin.c \
+	ft_strcat.c \
 	ft_strlcat.c \
 	ft_strlcpy.c \
 	ft_strlen.c \
