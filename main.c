@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/06 17:58:35 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/06 18:49:03 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	main(int ac, char **av, char **initial_env)
 		free_tokens(tokens);
 		free(input);
 	}
+	free_env(env);
 	return (0);
 }
 /*

@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/06 17:58:18 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/06 18:50:55 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ t_parser	*parse_lexer(t_lexer *tokens);
 
 // Main
 void		free_cmds(t_parser *cmds);
+void		free_env(t_env *env);
 void		free_tokens(t_lexer *tokens);
 char		*ft_getenv(char *var_name, t_env *env);
 t_env		*get_env(char **initial_env);
