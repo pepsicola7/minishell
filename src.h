@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/04 14:37:38 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/06 17:58:18 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,23 +69,7 @@ typedef struct s_parser
 	struct s_parser	*prev;
 }	t_parser;
 
-t_lexer		*lexer(char *input, t_env **env);
-t_lexer		*create_token(t_token type, char *value);
-void		add_token(t_lexer **head, t_lexer *new_token);
-void		free_cmds(t_parser *cmds);
-void		free_tokens(t_lexer *tokens);
-char		*ft_getenv(char *var_name, t_env *env);
-int 		(*get_builtin_function(char *cmd))(t_env *, t_parser *);
-t_env		*get_env(char **initial_env);
-int			handle_pipe(int i, t_lexer **tokens);
-int			handle_single_quotes(int i, const char *input, t_lexer **tokens);
-int			handle_double_quotes(int i, const char *input, t_lexer **tokens, t_env **env);
-int			handle_environement_var(int i, char *input, t_lexer **tokens);
-int			handle_redirection_in(int i, const char *input, t_lexer **tokens);
-int			handle_redirection_out(int i, const char *input, t_lexer **tokens);
-int			handle_word(int i, const char *input, t_lexer **tokens/*, t_env **env*/);
-int			is_builtin(char *cmd);
-int			is_special_char(char c);
+// Builtins
 int			my_cd(t_env *env, struct s_parser *parser);
 int			my_echo(t_env *env, struct s_parser *parser);
 int			my_env(t_env *env, struct s_parser *parser);
@@ -93,8 +77,38 @@ int			my_exit(t_env *env, struct s_parser *parser);
 int			my_export(t_env *env, struct s_parser *parser);
 int			my_pwd(t_env *env, struct s_parser *parser);
 int			my_unset(t_env *env, struct s_parser *parser);
-t_parser	*parse_lexer(t_lexer *tokens);
+
+// Lexer
+void		add_token(t_lexer **head, t_lexer *new_token);
+char		*concat(char *expanded_text, char *new_part);
+t_lexer		*create_token(t_token type, char *value);
+int			handle_double_quotes(int i, char *input, t_env *env, char **word);
+int			handle_pipe_l(int i, t_lexer **tokens);
+int			handle_regular_text(int i, char *input, t_env *env, char **word);
+int			handle_redirection_in(int i, const char *input, t_lexer **tokens);
+int			handle_redirection_out(int i, const char *input, t_lexer **tokens);
+int			handle_single_quotes(int i, char *input, char **word);
+int			handle_word(int i, char *input, t_lexer **tokens, t_env *env);
+t_lexer		*lexer(char *input, t_env **env);
 char		*replace_env_variables(const char *input, t_env *env);
+
+// Parser
+void		add_argument_to_cmd(t_parser *cmd, char *arg);
+void		add_cmd(t_parser **head, t_parser *new_cmd);
+void		add_redirection(t_parser *cmd, int redir_type, char *redir_value);
+t_parser	*create_cmd(void);
+int			(*get_builtin_function(char *cmd))(t_env *, t_parser *);
+void		handle_command(t_parser **current_cmd, t_lexer *tokens);
+t_lexer		*handle_redirection(t_parser **current_cmd, t_lexer *tokens);
+int			handle_pipe_p(t_parser **parser, t_parser **cmd, t_lexer *tokens);
+int			is_builtin(char *cmd);
+t_parser	*parse_lexer(t_lexer *tokens);
+
+// Main
+void		free_cmds(t_parser *cmds);
+void		free_tokens(t_lexer *tokens);
+char		*ft_getenv(char *var_name, t_env *env);
+t_env		*get_env(char **initial_env);
 void		setup_signals(void);
 
 #endif

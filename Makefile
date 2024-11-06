@@ -6,7 +6,7 @@
 #    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 15:18:00 by tbartocc          #+#    #+#              #
-#    Updated: 2024/11/01 18:14:30 by tbartocc         ###   ########.fr        #
+#    Updated: 2024/11/06 17:47:56 by tbartocc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRC_COMMON =	builtins/cd.c \
 				lexer/redirection_handlers.c \
 				lexer/signal_handlers.c \
 				lexer/token.c \
+				parser/handle_cases.c \
 				parser/parser.c \
 				builtin.c \
 				free.c \

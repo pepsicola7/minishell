@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:13:11 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/10/30 14:47:11 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/06 18:01:34 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	split_env_var(char *env_var, char **name, char **value)
 	i = 0;
 	while (env_var[i] && env_var[i] != '=')
 		i++;
-	*name = strndup(env_var, i);
+	*name = ft_strndup(env_var, i);
 	if (env_var[i] == '=')
 		*value = ft_strdup(env_var + i + 1);
 	else

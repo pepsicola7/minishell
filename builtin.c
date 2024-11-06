@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:32:20 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/04 14:37:49 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/06 18:01:04 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 int	is_builtin(char *cmd)
 {
-	return (!strcmp(cmd, "cd")
-		|| !strcmp(cmd, "echo")
-		|| !strcmp(cmd, "env")
-		|| !strcmp(cmd, "exit")
-		|| !strcmp(cmd, "export")
-		|| !strcmp(cmd, "pwd")
-		|| !strcmp(cmd, "unset"));
+	return (!ft_strcmp(cmd, "cd")
+		|| !ft_strcmp(cmd, "echo")
+		|| !ft_strcmp(cmd, "env")
+		|| !ft_strcmp(cmd, "exit")
+		|| !ft_strcmp(cmd, "export")
+		|| !ft_strcmp(cmd, "pwd")
+		|| !ft_strcmp(cmd, "unset"));
 }
 
-int (*get_builtin_function(char *cmd))(t_env *, t_parser *)
+int	(*get_builtin_function(char *cmd))(t_env *env, t_parser *parser)
 {
 	if (!ft_strcmp(cmd, "echo"))
 		return (&my_echo);

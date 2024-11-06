@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:45:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/01 12:07:49 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/06 16:26:58 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	extract_var_name(const char *input, int *i, char *var_name)
 	var_name[j] = '\0';
 }
 
-char	*concat_expanded_text(char *expanded_text, char *new_part)
+char	*concat(char *expanded_text, char *new_part)
 {
 	char	*new_text;
 
@@ -76,13 +76,13 @@ char	*replace_env_variables(const char *input, t_env *env)
 		{
 			i++;
 			extract_var_name(input, &i, var_name);
-			expanded_text = concat_expanded_text(expanded_text, get_env_value(var_name, env));
+			expanded_text = concat(expanded_text, get_env_value(var_name, env));
 		}
 		else
 		{
 			tmp_str[0] = input[i++];
 			tmp_str[1] = '\0';
-			expanded_text = concat_expanded_text(expanded_text, tmp_str);
+			expanded_text = concat(expanded_text, tmp_str);
 		}
 	}
 	return (expanded_text);

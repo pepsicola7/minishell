@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/04 14:00:21 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/06 17:58:35 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,24 @@ int	main(int ac, char **av, char **initial_env)
 	}
 	return (0);
 }
+/*
+	Add to main :
+	
+	cmds = parse_lexer(tokens);
+	*Executor*
+	free_cmds(cmds);
 
-// int	main(int ac, char **av)
-// {
-// 	(void)ac;
-// 	int i = -1;
-// 	while (av[i] && av[++i])
-// 	{
-// 		printf("av%d : %s\n", i, av[i]);
-// 	}
-// 	return 0;
-// }
+	Executor tmp :
+
+	t_parser	*tmp;
+
+	tmp = cmds;
+	while (tmp)
+	{
+		if (tmp->builtin)
+			tmp->builtin(env, tmp);
+		else
+			printf("execve\n");
+		tmp = tmp->next;
+	}
+*/

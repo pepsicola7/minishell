@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/10/28 19:31:21 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/06 18:01:25 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_lexer	*create_token(t_token type, char *value)
 	token->type = type;
 	token->value = NULL;
 	if (value)
-		token->value = strdup(value);
+		token->value = ft_strdup(value);
 	token->next = NULL;
 	return (token);
 }
