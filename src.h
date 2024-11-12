@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/06 19:18:06 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/12 17:46:23 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@
 typedef enum token
 {
 	WORD,
-	SINGLE,
-	DOUBLE,
 	PIPE,
 	REDIR_IN, // <
 	REDIR_OUT, // >
@@ -44,7 +42,7 @@ typedef enum token
 
 typedef struct s_env
 {
-	int				index;
+	int				index; // equale le nombre de l'environnement?
 	char			*name;
 	char			*value;
 
@@ -68,6 +66,17 @@ typedef struct s_parser
 	struct s_parser	*next;
 	struct s_parser	*prev;
 }	t_parser;
+
+typedef struct s_exe
+{
+	char		**env;
+	pid_t		pid;
+	char		*pathname;
+	int			pipefd[2];
+	int			nmb_cmd;
+	int			fd;
+	int			index_pipe;
+}	t_exe;
 
 // Builtins
 int			my_cd(t_env *env, struct s_parser *parser);
