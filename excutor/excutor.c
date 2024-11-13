@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/11/12 18:09:07 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/13 19:11:08 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	t_parser	*cmd_temps;
 	int		count;
 	int		index;
+	int		fd;
 
 	index = 0;
 	cmd_temps = cmds;
@@ -88,7 +89,10 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	exe->nmb_cmd = count;
 	exe->env =  trans_env(env);
 	exe->pathname = get_pathname(env);//need to malloc;
-	exe->index_pipe = index;
+	exe->fd[0] = STDIN_FILENO;
+	exe->fd[1] = STDOUT_FILENO;
+	exe->pipefd[0] = -1;
+	exe->pipefd[1] = -1;
 	return(exe);
 }
 
@@ -110,6 +114,12 @@ int	excutor(t_env *env, t_parser *cmds)
 		}
 		return ;
 	}
+	// if (exe->nmb_cmd > 1)
+	// {
+	// 	close (exe->pipefd[0]);
+	// 	dup2 (exe->pipefd[1], STDOUT_FILENO);
+	// 	close (exe->pipefd[1]);
+	// }
 	if (exec_redirection(exe, cmds) == -1)
 	{
 		printf ("Erreur lors de l'exécution externe\n");

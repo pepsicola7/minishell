@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/12 17:46:23 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/13 16:48:11 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ typedef struct s_exe
 	char		*pathname;
 	int			pipefd[2];
 	int			nmb_cmd;
-	int			fd;
-	int			index_pipe;
+	int			fd[2];
 }	t_exe;
 
 // Builtins
