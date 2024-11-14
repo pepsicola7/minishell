@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/11/13 19:11:08 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/14 23:00:29 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	excutor(t_env *env, t_parser *cmds)
 	}
 	return ;
 }
-/* si j'ai besoin malloc pour pipefd:
+/*si j'ai besoin malloc pour pipefd : 
 int	exec_externe(t_exe *exe, t_parser *cmds)
 {
 	int		*pipefd;
