@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/14 22:59:06 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/14 23:41:46 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_exe
 	int			pipefd[2];
 	int			nmb_cmd;
 	int			fd[2];
+	int			index_pid;
 }	t_exe;
 
 // Builtins

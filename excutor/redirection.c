@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/11/14 23:03:08 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/15 00:00:24 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,11 +100,11 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 	exit(EXIT_SUCCESS);
 }
 
-int	exec_redirection(t_exe *exe, t_parser *cmds)
+int	pipeline(t_exe *exe, t_parser *cmds)
 {
 	int	i;
-	
-	i = 0;
+
+	i = exe->index_pid;
 	exe->pid[i] = fork(); // sauvgarder le pid poue waitpit() a la fin;
 	if (exe->pid[i] == -1)
 	{
@@ -126,13 +126,18 @@ int	exec_redirection(t_exe *exe, t_parser *cmds)
 	{
 		while (cmds->cmd)
 		{
-			exec_redirection(exe, cmds);
+			pipeline(exe, cmds);
 			cmds = cmds->next;
+			exe->index_pid++;
 		}
-		if (waitpid(exe->pid, NULL, 0) == -1) // nned to modifier pid as a tableau
+		while (i >= 0)
 		{
-			perror("Error de exec parent");
-			return (-1);
+			if (waitpid(exe->pid[i], NULL, 0) == -1) // nned to modifier pid as a tableau
+			{
+				perror("Error de exec parent");
+				return (-1);
+			}
+			i--;
 		}
 	}
 	return (0);
