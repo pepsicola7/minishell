@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excutor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/11/14 23:41:50 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/15 03:18:25 by peiqi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**trans_env(t_env	*env_lst)
 		env[i] = malloc ((len_name + len_value + 2) * sizeof(char));//need a boucle to free;
 		if (!env[i])
 		{
-			perror ("Erreur d'allocation mémoire");
+			perror("Erreur d'allocation mémoire");
 			while (i >= 0)
 			{
 				free(env[i]);
