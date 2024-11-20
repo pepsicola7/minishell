@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/14 23:41:46 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/20 18:46:04 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ typedef struct s_lexer
 
 typedef struct s_parser
 {
-	char			**cmd;
+	char			**cmd; // execve recoit un **;
 	int				(*builtin)(t_env *, struct s_parser *);
 	int				num_redirections;
 	char			*hd_file_name;

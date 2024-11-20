@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/11/15 00:00:24 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/20 21:18:38 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 			dup2(old_fd, exe->fd[1]);
 			close(old_fd);
 		}
-		if (redirection->type == APPEND) // ??? teste le cas special apres
+		if (redirection->type == APPEND) // ??? test le cas special apres
 		{
 			old_fd = open (redirection->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (old_fd == -1)
@@ -50,12 +50,29 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				perror("Erreur d'ouverture du fichier en mode append");
 				return (-1);
 			}
-			dup2(old_fd, exe->fd);
+			dup2(old_fd, exe->fd);//???
 			close(old_fd);
 		}
 		if (redirection->type == HEREDOC)
 		{
 			
+		}
+		if (redirection->type == PIPE) // gerer pipesfd[1]ici
+		{
+			if (exe->fd[1] != STDOUT_FILENO && exe->pipefd[1]) // if there have a output deja;
+				close(exe->pipefd[1]);
+			else if (exe->fd[1] == STDOUT_FILENO && exe->pipefd[1])
+			{
+				dup2(exe->pipefd[1], STDOUT_FILENO);
+				close(exe->pipefd[1]);
+			}
+			// if (exe->fd[0] != STDIN_FILENO) // if there have a input;si'il existe des choses dans le pipe precedent, fd[0] == pipefd[1](ancien avant);
+			// 	close(exe->pipefd[0]);
+			// if (exe->fd[0] == STDIN_FILENO)
+			// {
+			// 	dup2(exe->pipefd[0], );
+			// 	close(exe->pipefd[0]);
+			// }
 		}
 		redirection = redirection->next;
 	}
@@ -68,34 +85,26 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 	{
 		if (exe->nmb_cmd > 1) // if this is not the last commande
 		{
-			if (pipe(exe->pipefd) == -1)
+			if (pipe(exe->pipefd) == -1) // open the pipe
 			{
 				perror("Erreur lors de la création du pipe");
 				exit(EXIT_FAILURE);
 			}
-			dup2(exe->pipefd[1], exe->fd[1]);
-			close(exe->pipefd[1]);
 			exe->nmb_cmd -= 1;
-		}
-		else //la derniere commande;
-		{
-			close(exe->pipefd[0]);
-			close(exe->pipefd[1]);
 		}
 	}
 	if (handle_redir(exe, cmds) == -1)
-	{		// if (exe->pipefd[0] != -1) //this is not the first commande, envoyer la sortie a l'entree
-		// {
-		// 	dup2 (exe->pipefd[0], STDIN_FILENO);
-		// 	close (exe->pipefd[0]);
-		// }
+	{	
 		perror("Erreur d'exécution de la redirection");
 		exit(EXIT_FAILURE);
 	}
-	if (execve(exe->pathname, cmds->cmd, exe->env) == -1)
+	if (!cmds->cmd)
 	{
-		perror("Erreur d'exécution de la commande");
-		exit(EXIT_FAILURE);
+		if (execve(exe->pathname, cmds->cmd, exe->env) == -1)
+		{
+			perror("Erreur d'exécution de la commande");
+			exit(EXIT_FAILURE);
+		}
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -113,9 +122,11 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 	}
 	if (exe->pid[i] == 0) // processus enfant
 	{
-		if (exe->pipefd[0] != -1) //this is not the first commande, envoyer la sortie a l'entree
+		if (exe->pipefd[0] == -1) //the first commande
+			close(exe->pipefd[0]);
+		if (exe->pipefd[0] != -1) //not the first cmd, envoyer la sortie a l'entree
 		{
-			dup2(exe->pipefd[0], STDIN_FILENO);
+			dup2(exe->pipefd[0], STDIN_FILENO); // ??? pas sure
 			close(exe->pipefd[0]);
 		}
 		exec_commande(exe, cmds);
@@ -139,6 +150,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			}
 			i--;
 		}
+		// gerer exit();
 	}
 	return (0);
 }

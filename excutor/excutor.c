@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/11/14 23:41:50 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/20 17:33:25 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	exe->nmb_cmd = count;
 	exe->env =  trans_env(env);
 	exe->pathname = get_pathname(env);//need to malloc;
-	exe->fd[0] = STDIN_FILENO;
-	exe->fd[1] = STDOUT_FILENO;
+	exe->fd[0] = STDIN_FILENO; // Input;
+	exe->fd[1] = STDOUT_FILENO; // Output;
 	exe->pipefd[0] = -1;
 	exe->pipefd[1] = -1;
 	exe->index_pid = 0;
