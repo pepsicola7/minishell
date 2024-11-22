@@ -6,11 +6,16 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/11/22 17:22:14 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/22 20:00:54 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
+
+int	redir_pipe(t_exe *exe, t_parser *cmds)
+{
+	
+}
 
 int	handle_redir(t_exe *exe, t_parser *cmds)
 {
@@ -18,7 +23,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 	int old_fd;
 	
 	redirection = cmds->redirections;
-	while (redirection)
+	while (redirection && redirection->type != PIPE)
 	{
 		if (redirection->type == REDIR_IN) // <
 		{
@@ -76,6 +81,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 		}
 		redirection = redirection->next;
 	}
+	redir_pipe(exe, cmds);
 	return (0);
 }
 
@@ -117,6 +123,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 	exe->pid[i] = fork(); // sauvgarder le pid poue waitpit() a la fin;
 	if (exe->pid[i] == -1)
 	{
+		free(exe->pid);
 		perror("Erreur du fork");
 		return (-1);
 	}
@@ -139,7 +146,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		{
 			pipeline(exe, cmds);
 			cmds = cmds->next;
-			exe->index_pid++;
+			exe->index_pid++; // ici a la fin check si'il est bien imprimente;
 		}
 		while (i >= 0)
 		{
