@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/11/20 21:18:38 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/22 17:22:14 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				perror("Erreur d'ouverture du fichier d'entree");
 				return (-1);
 			}
-			dup2(old_fd, exe->fd[0]); // intput ici est old_fd, output ici est STDOUT;
-			close(exe->fd[0]);
+			dup2(old_fd, exe->fd[0]);
+			close(old_fd);
 		}
 		if (redirection->type == REDIR_OUT) // >
 		{
@@ -42,7 +42,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 			dup2(old_fd, exe->fd[1]);
 			close(old_fd);
 		}
-		if (redirection->type == APPEND) // ??? test le cas special apres
+		if (redirection->type == APPEND) // >> test le cas special apres
 		{
 			old_fd = open (redirection->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (old_fd == -1)
@@ -50,10 +50,10 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				perror("Erreur d'ouverture du fichier en mode append");
 				return (-1);
 			}
-			dup2(old_fd, exe->fd);//???
+			dup2(old_fd, exe->fd[1]);
 			close(old_fd);
 		}
-		if (redirection->type == HEREDOC)
+		if (redirection->type == HEREDOC) // <<
 		{
 			
 		}
