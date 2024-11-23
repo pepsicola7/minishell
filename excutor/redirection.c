@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/11/23 18:50:48 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/23 22:18:08 by peiqi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		while (cmds->cmd)
 		{
 			pipeline(exe, cmds);
-			cmds->cmd = cmds->next;
+			cmds = cmds->next;
 			exe->index_pid++; // ici a la fin check si'il est bien imprimente;
 		}
 		while (i >= 0)

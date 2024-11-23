@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excutor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/11/23 13:58:25 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/23 22:17:13 by peiqi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	**trans_env(t_env	*env_lst)
 	if (!env)
 	{
 		perror("Erreur d'allocation mémoire");
-		return (-1);
+		return (NULL);
 	}
 	while (env_lst)
 	{
@@ -75,13 +75,11 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	t_exe	*exe;
 	t_parser	*cmd_temps;
 	int		count;
-	int		index;
-	int		fd;
 
-	index = 0;
+	exe = malloc(sizeof(t_exe));
 	cmd_temps = cmds;
 	count = 0;
-	while (cmd_temps->cmd)
+	while (cmd_temps->cmd && cmd_temps)
 	{
 		count++;
 		cmd_temps = cmd_temps->next;
@@ -110,19 +108,19 @@ int	excutor(t_env *env, t_parser *cmds)
 	// if this is a bulltin solo; (&& cmds->next == NULL && cmds->prev == NULL)
 	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL)
 	{
-		if (cmds->builtin(env, cmds) == -1);
+		if (cmds->builtin(env, cmds) == -1)
 		{
 			printf ("Erreur lors de l'exécution du builtin\n");
 			return (-1);
 		}
-		return ;
+		return (0);
 	}
 	if (pipeline(exe, cmds) == -1)
 	{
 		printf ("Erreur lors de l'exécution externe\n");
 		return (-1);
 	}
-	return ;
+	return (0);
 }
 /*si j'ai besoin malloc pour pipefd : 
 int	exec_externe(t_exe *exe, t_parser *cmds)

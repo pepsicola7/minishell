@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:35:56 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/06 18:51:24 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/23 22:32:08 by peiqi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	free_cmds(t_parser *cmds)
 			}
 			free(tmp->cmd);
 		}
-		free(tmp->hd_file_name);
+		// free(tmp->hd_file_name);
 		free_tokens(tmp->redirections);
 		free(tmp);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 16:22:08 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/10/09 15:42:40 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/23 23:41:58 by peiqi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	if_newline_pos(char **newline_pos, char **line, char **remainder)
 
 	**newline_pos = '\0';
 	*line = ft_strdup(*remainder);
-	if (*newline_pos + 1 && ft_strlen(*newline_pos + 1))
+	if (ft_strlen(*newline_pos + 1)) //(*newline_pos + 1 &&)the comparison will always evaluate as ‘true’ for the pointer operand in ‘*newline_pos + 1’ must not be NULL [-Werror=address]
 	{
 		tmp = ft_strdup(*newline_pos + 1);
 		free(*remainder);

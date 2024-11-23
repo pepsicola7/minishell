@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:22:06 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/06 19:18:12 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/23 22:31:49 by peiqi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_parser	*create_cmd(void)
 	cmd->cmd = NULL;
 	cmd->builtin = NULL;
 	cmd->num_redirections = 0;
-	cmd->hd_file_name = NULL;
+	// cmd->hd_file_name = NULL;
 	cmd->redirections = NULL;
 	cmd->next = NULL;
 	cmd->prev = NULL;

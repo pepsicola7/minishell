@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/11 18:00:47 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/23 23:53:56 by peiqi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	print_parser(t_parser *cmds)
 			printf("    Type: %d, Value: %s\n", redir->type, redir->value);
 			redir = redir->next;
 		}
-		if (cmds->hd_file_name)
-			printf("  Heredoc file: %s\n", cmds->hd_file_name);
+		// if (cmds->hd_file_name)
+		// 	printf("  Heredoc file: %s\n", cmds->hd_file_name);
 		printf("  Number of redirections: %d\n", cmds->num_redirections);
 		printf("\n");
 		cmds = cmds->next;
