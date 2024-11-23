@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
+#    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 15:18:00 by tbartocc          #+#    #+#              #
-#    Updated: 2024/11/06 17:47:56 by tbartocc         ###   ########.fr        #
+#    Updated: 2024/11/23 18:59:13 by peli             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,8 @@ SRC_COMMON =	builtins/cd.c \
 				builtins/export.c \
 				builtins/pwd.c \
 				builtins/unset.c \
+				excutor/excutor.c \
+				excutor/redirection.c \
 				lexer/env_expansion.c \
 				lexer/lexer.c \
 				lexer/quote_handlers.c \

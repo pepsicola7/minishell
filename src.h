@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/20 18:46:04 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/23 18:58:07 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_parser
 	char			**cmd; // execve recoit un **;
 	int				(*builtin)(t_env *, struct s_parser *);
 	int				num_redirections;
-	char			*hd_file_name;
+	// char			*hd_file_name; stock in a pipe instead of a file;
 	t_lexer			*redirections;
 	struct s_parser	*next;
 	struct s_parser	*prev;
@@ -76,6 +76,7 @@ typedef struct s_exe
 	int			nmb_cmd;
 	int			fd[2];
 	int			index_pid;
+	int			hd_pipe[2];
 }	t_exe;
 
 // Builtins
@@ -121,4 +122,13 @@ char		*ft_getenv(char *var_name, t_env *env);
 t_env		*get_env(char **initial_env);
 void		setup_signals(void);
 
+// Excutor
+int			excutor(t_env *env, t_parser *cmds);
+t_exe		*init_exe(t_env *env, t_parser *cmds);
+char		*get_pathname(t_env *env_lst);
+char		**trans_env(t_env	*env_lst);
+int			pipeline(t_exe *exe, t_parser *cmds);
+int			exec_commande(t_exe *exe, t_parser *cmds);
+int			handle_redir(t_exe *exe, t_parser *cmds);
+void		redir_heredoc(t_exe *exe, t_parser *cmds);
 #endif

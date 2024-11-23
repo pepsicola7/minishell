@@ -6,15 +6,40 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/11/22 20:00:54 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/23 18:50:48 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
 
-int	redir_pipe(t_exe *exe, t_parser *cmds)
-{
+// int	redir_pipe(t_exe *exe, t_parser *cmds)
+// {
 	
+// }
+
+void	redir_heredoc(t_exe *exe, t_parser *cmds)
+{
+	char	*line;
+	t_lexer	*redirection;
+
+	redirection = cmds->redirections;
+	if (pipe(exe->hd_pipe) == -1)
+	{
+		perror("Erreur lors de la création du pipe");
+		exit(EXIT_FAILURE);
+	}
+	close(exe->hd_pipe[0]);
+	while (1)
+	{
+		line = readline(">");
+		if (ft_strcmp(line, redirection->value) == 0)
+			break;
+		write(exe->hd_pipe[1], line, ft_strlen(line));
+		write(exe->hd_pipe[1], "/n", 1);
+	}
+	dup2(exe->hd_pipe[1], exe->fd[1]);
+	close(exe->hd_pipe[1]);
+	return;
 }
 
 int	handle_redir(t_exe *exe, t_parser *cmds)
@@ -59,13 +84,14 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 			close(old_fd);
 		}
 		if (redirection->type == HEREDOC) // <<
-		{
-			
-		}
+			redir_heredoc(exe, cmds);
 		if (redirection->type == PIPE) // gerer pipesfd[1]ici
 		{
 			if (exe->fd[1] != STDOUT_FILENO && exe->pipefd[1]) // if there have a output deja;
+			{
+				//exe->fd[1] = STDOUT_FILENO; il faut initial ou?
 				close(exe->pipefd[1]);
+			}
 			else if (exe->fd[1] == STDOUT_FILENO && exe->pipefd[1])
 			{
 				dup2(exe->pipefd[1], STDOUT_FILENO);
@@ -81,7 +107,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 		}
 		redirection = redirection->next;
 	}
-	redir_pipe(exe, cmds);
+	// redir_pipe(exe, cmds);
 	return (0);
 }
 
@@ -145,7 +171,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		while (cmds->cmd)
 		{
 			pipeline(exe, cmds);
-			cmds = cmds->next;
+			cmds->cmd = cmds->next;
 			exe->index_pid++; // ici a la fin check si'il est bien imprimente;
 		}
 		while (i >= 0)
