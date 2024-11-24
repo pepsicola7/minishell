@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excutor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/11/23 22:17:13 by peiqi            ###   ########.fr       */
+/*   Updated: 2024/11/24 18:11:23 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,41 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	t_parser	*cmd_temps;
 	int		count;
 
+	// cmd_temps = NULL;
+	if (!cmds)
+	{
+		perror("la liste de commandes est vide");
+		return (NULL);
+	}
 	exe = malloc(sizeof(t_exe));
+	if (!exe)
+	{
+		perror("Erreur d'allocation memoire pour exe");
+		return (NULL);
+	}
 	cmd_temps = cmds;
 	count = 0;
-	while (cmd_temps->cmd && cmd_temps)
+	while (cmd_temps && cmd_temps->cmd)
 	{
 		count++;
 		cmd_temps = cmd_temps->next;
 	}
 	exe->nmb_cmd = count;
 	exe->env =  trans_env(env);
+	if (!exe->env)
+	{
+		free(exe);
+		perror("Erreur lors de la conversion de l'environnement");
+		return (NULL);
+	}
 	exe->pathname = get_pathname(env);//need to malloc;
+	if (!exe->pathname)
+	{
+		free(exe->env);
+		free(exe);
+		perror("Erreur lors de la récupération des chemins");
+		return (NULL);
+	}
 	exe->fd[0] = STDIN_FILENO; // Input;
 	exe->fd[1] = STDOUT_FILENO; // Output;
 	exe->pipefd[0] = -1;

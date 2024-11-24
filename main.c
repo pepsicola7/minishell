@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/23 23:53:56 by peiqi            ###   ########.fr       */
+/*   Updated: 2024/11/24 17:18:51 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ int	main(int ac, char **av, char **initial_env)
 		tokens = lexer(input, &env);
 		// print_lexers(tokens);
 		cmds = parse_lexer(tokens);
-		print_parser(cmds);
+		// print_parser(cmds);
+		excutor(env, cmds);
 		free_cmds(cmds);
 		free_tokens(tokens);
 		free(input);
