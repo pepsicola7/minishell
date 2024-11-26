@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   src.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/23 22:08:46 by peiqi            ###   ########.fr       */
+/*   Updated: 2024/11/25 15:39:48 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,9 @@ void		free_cmds(t_parser *cmds);
 void		free_env(t_env *env);
 void		free_tokens(t_lexer *tokens);
 char		*ft_getenv(char *var_name, t_env *env);
+void		print_env(t_env *env);
 t_env		*get_env(char **initial_env);
+void		print_parser(t_parser *cmds);
 void		setup_signals(void);
 
 // Excutor

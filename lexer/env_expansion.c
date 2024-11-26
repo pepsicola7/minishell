@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   env_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:45:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/23 22:31:07 by peiqi            ###   ########.fr       */
+/*   Updated: 2024/11/25 15:42:35 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
+
+void	print_env(t_env *env)
+{
+	t_env *tmp;
+
+	tmp = env;
+	printf("%s=%s\n", tmp->name, tmp->value);
+	while (tmp && tmp->next)
+	{
+		tmp = tmp->next;
+		printf("%s=%s\n", tmp->name, tmp->value);
+	}
+}
 
 char	*ft_getenv(char *var_name, t_env *env)
 {
