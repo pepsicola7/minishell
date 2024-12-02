@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
+#    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 14:34:27 by tbartocc          #+#    #+#              #
-#    Updated: 2024/09/02 18:21:45 by tbartocc         ###   ########.fr        #
+#    Updated: 2024/11/26 14:29:28 by peli             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 LIBFT = ./Libft/
 
 SRC =	printf.c	\

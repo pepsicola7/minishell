@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 09:42:49 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/10/11 12:01:53 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:10:44 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	ft_count_words(char const *str, char charset)
 	return (count);
 }
 
-char	*ft_strncpy(char *dest, char const *src, unsigned int n)
+char	*ft_strncpy2(char *dest, char const *src, unsigned int n)
 {
 	unsigned int	i;
 
@@ -80,7 +80,7 @@ char	**ft_split(char const *s, char c)
 		{
 			len = ft_strlen_c(s + i, c);
 			tab[k] = ft_calloc(sizeof(char), (len + 1));
-			ft_strncpy(tab[k++], s + i, len + 1);
+			ft_strncpy2(tab[k++], s + i, len + 1);
 			i += len;
 		}
 		i++;

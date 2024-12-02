@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:22:06 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/23 22:31:49 by peiqi            ###   ########.fr       */
+/*   Updated: 2024/11/26 15:19:28 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_parser	*create_cmd(void)
 {
 	t_parser	*cmd;
 
-	cmd = malloc(sizeof(t_parser));
+	cmd = ft_calloc(1, sizeof(t_parser));
 	if (!cmd)
 		return (NULL);
 	cmd->cmd = NULL;
@@ -72,7 +72,7 @@ void	add_argument_to_cmd(t_parser *cmd, char *arg)
 	arg_count = 0;
 	while (cmd->cmd && cmd->cmd[arg_count])
 		arg_count++;
-	new_args = malloc(sizeof(char *) * (arg_count + 2));
+	new_args = ft_calloc((arg_count + 2), sizeof(char *));
 	if (!new_args)
 		return ;
 	i = 0;

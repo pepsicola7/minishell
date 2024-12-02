@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/11/25 18:32:23 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/27 14:39:36 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	**trans_env(t_env	*env_lst)
 	}
 	printf ("The count of env is : %d", count);
 	fflush(stdout);
-	env = malloc((count + 1) * sizeof(char *)); // need to free;
+	env = ft_calloc((count + 1) * sizeof(char *)); // need to free;
 	if (!env)
 	{
 		perror("Erreur d'allocation mémoire");
@@ -44,7 +44,7 @@ char	**trans_env(t_env	*env_lst)
 		
 		len_name = ft_strlen(env_lst->name);
 		len_value = ft_strlen(env_lst->value);
-		env[i] = malloc ((len_name + len_value + 2) * sizeof(char));//need a boucle to free;
+		env[i] = ft_calloc ((len_name + len_value + 2) * sizeof(char));//need a boucle to free;
 		if (!env[i])
 		{
 			perror("Erreur d'allocation mémoire");
@@ -68,6 +68,23 @@ char	**trans_env(t_env	*env_lst)
 	return (env);
 }
 */
+
+char	*ft_strcpy_(char *dest, const char *src)
+{
+	int	i;
+
+	i = 0;
+	if (!dest || !src)
+		return (NULL);
+	while (src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
 char	**trans_env(t_env	*env_lst)
 {
 	char **res;
@@ -80,22 +97,21 @@ char	**trans_env(t_env	*env_lst)
 	tmp = env_lst;
 	while (tmp)
 	{
+		// printf("temp = '%d'  =   '%s'=%s\n", count, tmp->name,tmp->value);
 		count++;
-		printf("temp = %d  =   %s=%s\n", tmp->index, tmp->name,tmp->value);
 		tmp = tmp->next;
 	}
-	// printf ("The count of env is : %d \n", count);
-	// fflush(stdout);
-	res = malloc(sizeof(char *) * (count));
-	while (i < count - 2)
+	printf ("The count of env is : %d \n", count);
+	fflush(stdout);
+	res = ft_calloc( (count + 1), sizeof(char *));
+	while (i < count)
 	{
 		if (!env_lst || !env_lst->name || !env_lst->value)
 		{
 			fprintf(stderr, "env_lst ou ses champs sont invalides\n");
 			return (NULL);
 		}
-		// res[i] = malloc(10000);
-		res[i] = malloc(sizeof(char)
+		res[i] = ft_calloc(sizeof(char), sizeof(char)
 			* (ft_strlen(env_lst->name) + ft_strlen(env_lst->value) + 2));
 		if (!res[i])
 		{
@@ -105,14 +121,11 @@ char	**trans_env(t_env	*env_lst)
 			free(res);
 			return (NULL);
 		}
-		// printf("%s\n", env_lst->name);
-		res[i] = ft_strcat(env_lst->name, "=");
-		res[i] = ft_strcat(res[i],	env_lst->value);
-		//printf("res[%d] = %s\n", i, res[i]);
+		ft_strcat(res[i], env_lst->name);
+		ft_strcat(res[i], "=");
+		ft_strcat(res[i], env_lst->value);
 		env_lst = env_lst->next;
 		i++;
-		// printf("The index of env is : %d \n", i);
-		// fflush(stdout);
 	}
 	res[i] = "\0";
 	return (res);
@@ -120,7 +133,7 @@ char	**trans_env(t_env	*env_lst)
 
 char	*get_pathname(t_env *env_lst)
 {
-	while (env_lst)fflush(stdout);
+	while (env_lst)
 	{
 		if (ft_strcmp(env_lst->name, "PATH") == 0)
 			return (env_lst->value);
@@ -141,7 +154,7 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 		perror("la liste de commandes est vide");
 		return (NULL);
 	}
-	exe = malloc(sizeof(t_exe));
+	exe = ft_calloc(1, sizeof(t_exe));
 	if (!exe)
 	{
 		perror("Erreur d'allocation memoire pour exe");
@@ -155,6 +168,13 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 		cmd_temps = cmd_temps->next;
 	}
 	exe->nmb_cmd = count;
+	exe->pid = ft_calloc(count, sizeof(pid_t));
+	if (!exe->pid)
+	{
+		free(exe);
+		perror("Erreur d'allocation mémoire pour exe->pid");
+		return (NULL);
+	}
 	exe->env =  trans_env(env);
 	if (!exe->env)
 	{
@@ -162,7 +182,7 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 		perror("Erreur lors de la conversion de l'environnement");
 		return (NULL);
 	}
-	exe->pathname = get_pathname(env);//need to malloc;
+	exe->pathname = get_pathname(env);//need to ft_calloc;
 	if (!exe->pathname)
 	{
 		free(exe->env);
@@ -184,15 +204,12 @@ int	excutor(t_env *env, t_parser *cmds)
 {
 	t_exe	*exe;
 
-	//exe = malloc (sizeof (exe));
-	//if (!exe)
-	//	return (-1);
 	exe = NULL;
 	print_parser(cmds);
 	// print_env(env);
 	exe = init_exe(env, cmds);
 	// if this is a bulltin solo; (&& cmds->next == NULL && cmds->prev == NULL)
-	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL)
+	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL && cmds->num_redirections == 0)
 	{
 		if (cmds->builtin(env, cmds) == -1)
 		{
@@ -208,7 +225,7 @@ int	excutor(t_env *env, t_parser *cmds)
 	}
 	return (0);
 }
-/*si j'ai besoin malloc pour pipefd : 
+/*si j'ai besoin ft_calloc pour pipefd : 
 int	exec_externe(t_exe *exe, t_parser *cmds)
 {
 	int		*pipefd;
@@ -225,7 +242,7 @@ int	exec_externe(t_exe *exe, t_parser *cmds)
 		cmd_temps = cmd_temps->next;
 	}
 	exe->nmb_cmd = count;
-	pipefd = malloc(((count - 1) * 2) * sizeof(int));//need to free a la fon d'execution;
+	pipefd = ft_calloc(((count - 1) * 2) * sizeof(int));//need to free a la fon d'execution;
 	if (!pipefd)
 		return (-1);
 	exe->pipefd = pipefd;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/06 18:01:25 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/26 15:18:44 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_lexer	*create_token(t_token type, char *value)
 {
 	t_lexer	*token;
 
-	token = (t_lexer *)malloc(sizeof(t_lexer));
+	token = (t_lexer *)ft_calloc(1, sizeof(t_lexer));
 	if (!token)
 		return (NULL);
 	token->type = type;

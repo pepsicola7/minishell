@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/25 18:15:52 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/26 17:29:37 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,10 @@ int	main(int ac, char **av, char **initial_env)
 		}
 		add_history(input);
 		tokens = lexer(input, &env);
-		print_lexers(tokens);
+		// print_lexers(tokens);
 		cmds = parse_lexer(tokens);
+		// ft_print_tab(initial_env);
+		// print_env(env);
 		// print_parser(cmds);
 		excutor(env, cmds);
 		free_cmds(cmds);

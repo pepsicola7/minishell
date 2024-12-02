@@ -6,11 +6,41 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 16:22:08 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/25 15:54:11 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/26 15:24:41 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	*ft_memset(void *s, int c, size_t n)
+{
+	size_t			i;
+	unsigned char	*cpy;
+
+	cpy = s;
+	i = 0;
+	while (i < n)
+	{
+		cpy[i] = c;
+		i++;
+	}
+	return (s);
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	size_t	total_size;
+	void	*ptr;
+
+	if (nmemb != 0 && (nmemb * size) / nmemb != size)
+		return (NULL);
+	total_size = nmemb * size;
+	ptr = malloc(total_size);
+	if (ptr == NULL)
+		return (NULL);
+	ft_memset(ptr, 0, total_size);
+	return (ptr);
+}
 
 int	ft_strlen(char *str)
 {
@@ -32,7 +62,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	if (!s1)
 		return (ft_strdup(s2));
-	res = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	res = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof(char));
 	if (!res)
 		return (NULL);
 	i = 0;
@@ -69,24 +99,3 @@ char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strdup(char *s1)
-{
-	char	*dup;
-	int		i;
-	int		tmp;
-
-	if (!s1)
-		return (NULL);
-	tmp = ft_strlen(s1);
-	dup = malloc(tmp + 1);
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (i < tmp)
-	{
-		dup[i] = s1[i];
-		i++;
-	}
-	dup[i] = '\0';
-	return (dup);
-}

@@ -6,13 +6,13 @@
 #    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 15:18:00 by tbartocc          #+#    #+#              #
-#    Updated: 2024/11/23 18:59:13 by peli             ###   ########.fr        #
+#    Updated: 2024/11/26 14:29:53 by peli             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address
 LDFLAGS = -lreadline -lhistory -lncurses
 
 PRINTF = ./Printf/

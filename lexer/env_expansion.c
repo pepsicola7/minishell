@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:45:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/25 15:42:35 by peli             ###   ########.fr       */
+/*   Updated: 2024/11/26 14:06:42 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	print_env(t_env *env)
 	t_env *tmp;
 
 	tmp = env;
-	printf("%s=%s\n", tmp->name, tmp->value);
+	printf("%d, %s=%s\n", tmp->index, tmp->name, tmp->value);
 	while (tmp && tmp->next)
 	{
 		tmp = tmp->next;
-		printf("%s=%s\n", tmp->name, tmp->value);
+		printf("%d, %s=%s\n", tmp->index, tmp->name, tmp->value);
 	}
 }
 

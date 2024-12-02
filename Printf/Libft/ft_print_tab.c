@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_tab.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:11:44 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/09/23 15:33:48 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:12:39 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,8 @@ void	ft_print_tab(char **map)
 
 	i = -1;
 	while (map && map[++i])
-		ft_putstr_n(map[i]);
+	{
+		printf("%d, %s\n", i, map[i]);
+		// ft_putstr_n(map[i]);
+	}
 }
