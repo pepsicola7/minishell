@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/11/27 14:39:36 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/04 18:58:00 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,9 @@ char	**trans_env(t_env	*env_lst)
 	tmp = env_lst;
 	while (tmp)
 	{
-		// printf("temp = '%d'  =   '%s'=%s\n", count, tmp->name,tmp->value);
 		count++;
 		tmp = tmp->next;
 	}
-	printf ("The count of env is : %d \n", count);
-	fflush(stdout);
 	res = ft_calloc( (count + 1), sizeof(char *));
 	while (i < count)
 	{
@@ -127,7 +124,7 @@ char	**trans_env(t_env	*env_lst)
 		env_lst = env_lst->next;
 		i++;
 	}
-	res[i] = "\0";
+	// res[i] = "\0";
 	return (res);
 }
 
@@ -148,7 +145,6 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	t_parser	*cmd_temps;
 	int		count;
 
-	// cmd_temps = NULL;
 	if (!cmds)
 	{
 		perror("la liste de commandes est vide");
@@ -194,6 +190,10 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	exe->fd[1] = STDOUT_FILENO; // Output;
 	exe->pipefd[0] = -1;
 	exe->pipefd[1] = -1;
+	// exe->pipefd = malloc(sizeof(int *) * exe->nmb_cmd);
+	// int i = -1;
+	// while (++i != exe->nmb_cmd)
+	// 	*exe->pipefd = malloc(sizeof(int) * 2);
 	exe->index_pid = 0;
 	exe->hd_pipe[0] = -1;
 	exe->hd_pipe[1] = -1;

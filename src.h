@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/25 15:39:48 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/04 19:22:31 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ typedef struct s_exe
 	int			nmb_cmd;
 	int			fd[2];
 	int			index_pid;
-	int			hd_pipe[2];
+	int			hd_pipe[2]; // que pour here doc;
+	int			prev_pipefd;
 }	t_exe;
 
 // Builtins
@@ -132,5 +133,6 @@ char		**trans_env(t_env	*env_lst);
 int			pipeline(t_exe *exe, t_parser *cmds);
 int			exec_commande(t_exe *exe, t_parser *cmds);
 int			handle_redir(t_exe *exe, t_parser *cmds);
-void		redir_heredoc(t_exe *exe, t_parser *cmds);
+int			redir_heredoc(t_exe *exe, t_parser *cmds);
+void		exc_solo_cmd(t_exe *exe, t_parser *cmds);
 #endif

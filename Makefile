@@ -6,7 +6,7 @@
 #    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 15:18:00 by tbartocc          #+#    #+#              #
-#    Updated: 2024/11/26 14:29:53 by peli             ###   ########.fr        #
+#    Updated: 2024/12/04 15:21:50 by peli             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ SRC_COMMON =	builtins/cd.c \
 				builtins/unset.c \
 				excutor/excutor.c \
 				excutor/redirection.c \
+				excutor/exc_utile.c\
 				lexer/env_expansion.c \
 				lexer/lexer.c \
 				lexer/quote_handlers.c \
