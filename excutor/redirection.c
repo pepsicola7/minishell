@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/12/04 20:50:25 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/05 14:22:42 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				perror("Erreur dup2 pour REDIR_OUT");
 				return (-1);
 			}
-			printf("avant fd[1] est : %d\n", exe->fd[1]);
+			// printf("avant fd[1] est : %d\n", exe->fd[1]);
 			exe->fd[1] = old_fd;  // Pour refléter que la redirection est active
 			close(old_fd);
 		}
@@ -133,12 +133,12 @@ void	pipex(t_exe *exe)
 {
 	if (exe->nmb_cmd > 1) // gerer pipesfd[1]ici
 	{
-		if (exe->fd[1] != STDOUT_FILENO) // if there have a output deja;
-		{
-			printf("Pipe avec les redirections\n");
-			fflush(stdout);
-			close(exe->pipefd[1]);
-		}
+		// if (exe->fd[1] != STDOUT_FILENO) // if there have a output deja;
+		// {
+		// 	printf("Pipe avec les redirections\n");
+		// 	fflush(stdout);
+		// 	close(exe->pipefd[1]);
+		// }
 		if (exe->fd[1] == STDOUT_FILENO) // sans redirections
 		{
 			// printf("Pipe sans les redirections\n");
@@ -166,10 +166,13 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 	i = exe->index_pid;
 	while (cmds)
 	{
-		if (pipe(exe->pipefd) == -1)
+		if (cmds->next)
 		{
-			perror("Erreur lors de la création du pipe");
-			exit(EXIT_FAILURE);
+			if (pipe(exe->pipefd) == -1)
+			{
+				perror("Erreur lors de la création du pipe");
+				exit(EXIT_FAILURE);
+			}
 		}
 		exe->pid[i] = fork(); // sauvgarder le pid pour waitpit() a la fin;
 		if (cmds == NULL)
@@ -182,8 +185,9 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		}
 		if (exe->pid[i] == 0) // processus enfant
 		{
-			printf("Pour la commande : %s le pipefd[1] = %d\n", cmds->cmd[0], exe->pipefd[1]);
-			fflush(stdout);
+			// printf("Pour la commande : %s le pipefd[1] = %d\n", cmds->cmd[0], exe->pipefd[1]);
+			// printf("prev est %d", prev_pipefd);
+			// fflush(stdout);
 			exc_solo_cmd(exe, cmds);
 			if (cmds->prev) //not the first cmd, envoyer la sortie a l'entree
 			{
@@ -195,41 +199,44 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 				// dup2(exe->pipefd[1], STDIN_FILENO); // ??? pas sure
 				close(prev_pipefd);
 			}
-			if (!cmds->next)
+			if (!cmds->next) // the last command
 			{
 				dup2(1, STDOUT_FILENO);
-				close(exe->pipefd[0]);
-				close(exe->pipefd[1]);
+				// close(exe->pipefd[0]);
+				// close(exe->pipefd[1]);
 			}
 			if (handle_redir(exe, cmds) == -1)
 			{	
 				perror("Erreur d'exécution de la redirection");
 				exit(EXIT_FAILURE);
 			}
-			printf("le pipefd[0] : %d le pipefd[1] = %d\n", exe->pipefd[0], exe->pipefd[1]);
+			// printf("le pipefd[0] : %d le pipefd[1] = %d\n", exe->pipefd[0], exe->pipefd[1]);
 			pipex(exe);
 			exec_commande(exe, cmds);
 			perror("Erreur d'exécution de la commande");
 			exit(1);
 		}
-		close(exe->pipefd[1]);
-		if (prev_pipefd != -1)
-			close(exe->prev_pipefd);
-		prev_pipefd = exe->pipefd[0];
+		if (cmds->next)
+		{
+			close(exe->pipefd[1]);
+			// if (prev_pipefd != -1)
+			// 	close(exe->prev_pipefd);
+			prev_pipefd = exe->pipefd[0];
+		}
 		cmds = cmds->next;
 		exe->index_pid++; 
 		exe->nmb_cmd -= 1;
 		// close(exe->pipefd[0]);
-		// ici a la fin check si'il est bien incrémenté;
-		printf("Index après incrémentation : %d\n", exe->index_pid);
-		fflush(stdout);
+		// // ici a la fin check si'il est bien incrémenté;
+		// printf("Index après incrémentation : %d\n", exe->index_pid);
+		// fflush(stdout);
 	}
 	if (prev_pipefd != -1)
 	{
 		close(prev_pipefd);
 	}
-	printf("index est %d:", exe->index_pid);
-	fflush(stdout);
+	// printf("index est %d:", exe->index_pid);
+	// fflush(stdout);
 	for (int j = 0; j < exe->index_pid; j++)
 	{
 		if (waitpid(exe->pid[j], NULL, 0) == -1)
