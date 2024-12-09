@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2024/12/04 17:37:36 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/09 15:36:30 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 	if (cmds->cmd)
 	{
 		exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?
+		// printf("Avant executer fd[0] is : %d\n", exe->fd[0]);
+		// printf("Avant executer fd[1] is : %d\n", exe->fd[1]);
+		// fflush(stdout);
 		if (execve(exc_pathname, cmds->cmd, exe->env) == -1)
 		{
 			perror("Erreur d'exécution de la commande");

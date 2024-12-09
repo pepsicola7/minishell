@@ -6,68 +6,11 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/12/04 18:58:00 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/05 15:49:54 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
-/*
-char	**trans_env(t_env	*env_lst)
-{
-	int			i;
-	int			count;
-	t_env		*temp;
-	char		**env;
-	int			len_name;
-	int			len_value;
-
-	i = 0;
-	count = 0;
-	temp = env_lst;
-	while (temp)
-	{
-		count++;
-		temp = temp->next;
-	}
-	printf ("The count of env is : %d", count);
-	fflush(stdout);
-	env = ft_calloc((count + 1) * sizeof(char *)); // need to free;
-	if (!env)
-	{
-		perror("Erreur d'allocation mémoire");
-		return (NULL);
-	}
-	while (i < count)
-	{
-		print_env(env_lst);
-		printf("name : %s, value : %s\n", env_lst->name, env_lst->value);
-		
-		len_name = ft_strlen(env_lst->name);
-		len_value = ft_strlen(env_lst->value);
-		env[i] = ft_calloc ((len_name + len_value + 2) * sizeof(char));//need a boucle to free;
-		if (!env[i])
-		{
-			perror("Erreur d'allocation mémoire");
-			while (i >= 0)
-			{
-				free(env[i]);
-				i--;
-			}
-			return (NULL);
-		}
-		env[i] = ft_strcat(env_lst->name, "=");
-		env[i] = ft_strcat(env[i] ,env_lst->value);
-		// if (!env_lst->next)
-		// 	break ;
-		env_lst = env_lst->next;
-		i++;
-		printf ("The index of env is : %d \n", i);
-		fflush(stdout);
-	}	
-	env[i] = "\0";
-	return (env);
-}
-*/
 
 char	*ft_strcpy_(char *dest, const char *src)
 {
@@ -279,3 +222,60 @@ int	exec_externe(t_exe *exe, t_parser *cmds)
 //   Redirections:
 //     Type: 5, Value: output.txt
 //   Number of redirections: 1
+/*
+char	**trans_env(t_env	*env_lst)
+{
+	int			i;
+	int			count;
+	t_env		*temp;
+	char		**env;
+	int			len_name;
+	int			len_value;
+
+	i = 0;
+	count = 0;
+	temp = env_lst;
+	while (temp)
+	{
+		count++;
+		temp = temp->next;
+	}
+	printf ("The count of env is : %d", count);
+	fflush(stdout);
+	env = ft_calloc((count + 1) * sizeof(char *)); // need to free;
+	if (!env)
+	{
+		perror("Erreur d'allocation mémoire");
+		return (NULL);
+	}
+	while (i < count)
+	{
+		print_env(env_lst);
+		printf("name : %s, value : %s\n", env_lst->name, env_lst->value);
+		
+		len_name = ft_strlen(env_lst->name);
+		len_value = ft_strlen(env_lst->value);
+		env[i] = ft_calloc ((len_name + len_value + 2) * sizeof(char));//need a boucle to free;
+		if (!env[i])
+		{
+			perror("Erreur d'allocation mémoire");
+			while (i >= 0)
+			{
+				free(env[i]);
+				i--;
+			}
+			return (NULL);
+		}
+		env[i] = ft_strcat(env_lst->name, "=");
+		env[i] = ft_strcat(env[i] ,env_lst->value);
+		// if (!env_lst->next)
+		// 	break ;
+		env_lst = env_lst->next;
+		i++;
+		printf ("The index of env is : %d \n", i);
+		fflush(stdout);
+	}	
+	env[i] = "\0";
+	return (env);
+}
+*/
