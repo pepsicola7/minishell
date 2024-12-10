@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2024/12/09 15:36:30 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/09 16:26:33 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,11 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 	// 	printf("cmd[%d]: %s\n", i, cmds->cmd[i]);
 	// for (int i = 0; exe->env[i]; i++)
 	// 	printf("env[%d]: %s\n", i, exe->env[i]);
+	if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
+	{
+		dup2(exe->fd[1], STDOUT_FILENO);
+		close (exe->fd[1]);
+	}
 	if (cmds->cmd)
 	{
 		exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?

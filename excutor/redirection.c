@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/12/09 15:37:07 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/09 16:24:51 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				perror("Erreur dup2 pour REDIR_IN");
 				return (-1);
 			}
-			close(old_fd);
+			// close(old_fd);
 		}
 		if (redirection->type == REDIR_OUT) // >
 		{
@@ -106,7 +106,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				return (-1);
 			}
 			exe->fd[1] = old_fd;
-			close(old_fd);
+			// close(old_fd);
 		}
 		if (redirection->type == HEREDOC) // <<
 		{
@@ -136,8 +136,10 @@ void	exc_solo_cmd(t_exe *exe, t_parser *cmds)
 		close(exe->pipefd[0]);
 		close(exe->pipefd[1]);
 		if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
+		{
 			dup2(exe->fd[1], STDOUT_FILENO);
-		close (exe->fd[1]);
+			close (exe->fd[1]);
+		}
 		exec_commande(exe, cmds);
 		perror("Erreur d'exécution de la seule commande");
 		exit(1);
