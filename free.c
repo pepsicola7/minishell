@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peiqi <peiqi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:35:56 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/23 22:32:08 by peiqi            ###   ########.fr       */
+/*   Updated: 2024/12/10 15:08:43 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,19 @@ void	free_tokens(t_lexer *tokens)
 		free(tmp->value);
 		free(tmp);
 	}
+}
+void	free_array(char	**str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+	return ;
 }

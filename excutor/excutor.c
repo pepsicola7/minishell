@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/12/05 15:49:54 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/12 17:14:35 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	exe->fd[0] = STDIN_FILENO; // Input;
 	exe->fd[1] = STDOUT_FILENO; // Output;
 	exe->pipefd[0] = -1;
-	exe->pipefd[1] = -1;
+	exe->pipefd[1] = -1; // garde ces deux lignes, sinon cat ne marche pas;
 	// exe->pipefd = malloc(sizeof(int *) * exe->nmb_cmd);
 	// int i = -1;
 	// while (++i != exe->nmb_cmd)
@@ -176,7 +176,7 @@ int	exec_externe(t_exe *exe, t_parser *cmds)
 	int		nbr_pipes;
 	int		count;
 	int		i;
-
+cat | cat | ls
 	cmd_temps = cmds;
 	count = 0;
 	while (cmd_temps->cmd)

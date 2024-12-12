@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2024/12/09 16:26:33 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/12 17:14:52 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,7 @@ char	*find_path(char *pathname, char *cmd)
 		free(path);
 		i++;
 	}
-	// while (i > 0)
-	// {
-	// free(sp_path[i]);
-	// 	i--;
-	// }
-	// free(sp_path); // check free;
+	// free_array(sp_path);
 	return (path);
 }
 
@@ -42,32 +37,24 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 {
 	char	*exc_pathname;
 
-	// if (!exc_pathname)
-	// {
-	// 	fprintf(stderr, "Commande introuvable: %s\n", cmds->cmd[0]);
-	// 	exit(EXIT_FAILURE);
-	// }
-	// printf("Chemin trouvé: %s\n", exc_pathname);
-	// if (!exc_pathname)
-	// {
-	// 	fprintf(stderr, "Commande introuvable: %s\n", cmds->cmd[0]);
-	// 	exit(EXIT_FAILURE);
-	// }
-	// // ajouter la condition pour check the pathname;
-	// for (int i = 0; cmds->cmd[i]; i++)
-	// 	printf("cmd[%d]: %s\n", i, cmds->cmd[i]);
-	// for (int i = 0; exe->env[i]; i++)
-	// 	printf("env[%d]: %s\n", i, exe->env[i]);
 	if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
 	{
 		dup2(exe->fd[1], STDOUT_FILENO);
-		close (exe->fd[1]);
+		close(exe->fd[1]);
 	}
 	if (cmds->cmd)
 	{
 		exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?
+		if (!exc_pathname)
+		{
+			perror("command not found\n");
+			free(exc_pathname);
+			exit(EXIT_FAILURE);
+		}
 		// printf("Avant executer fd[0] is : %d\n", exe->fd[0]);
 		// printf("Avant executer fd[1] is : %d\n", exe->fd[1]);
+		// printf("Avant executer STDIN is : %d\n", STDIN_FILENO);
+		// printf("Avant executer STDOUT is : %d\n", STDOUT_FILENO);
 		// fflush(stdout);
 		if (execve(exc_pathname, cmds->cmd, exe->env) == -1)
 		{
@@ -76,4 +63,27 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 		}
 	}
 	exit(EXIT_SUCCESS);
+}
+
+void	exc_solo_cmd(t_exe *exe, t_parser *cmds)
+{
+	if (!cmds->prev && !cmds->next)
+	{
+		if (handle_redir(exe, cmds) == -1)
+		{	
+			perror("Erreur d'exécution de la redirection");
+			exit(EXIT_FAILURE);
+		}
+		close(exe->pipefd[0]);
+		close(exe->pipefd[1]);
+		if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
+		{
+			dup2(exe->fd[1], STDOUT_FILENO);
+			close (exe->fd[1]);
+		}
+		exec_commande(exe, cmds);
+		perror("Erreur d'exécution de la seule commande");
+		exit(1);
+	}
+	return ;
 }

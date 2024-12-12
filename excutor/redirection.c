@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/12/09 16:24:51 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/12 17:05:10 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,29 +124,6 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 	return (0);
 }
 
-void	exc_solo_cmd(t_exe *exe, t_parser *cmds)
-{
-	if (!cmds->prev && !cmds->next)
-	{
-		if (handle_redir(exe, cmds) == -1)
-		{	
-			perror("Erreur d'exécution de la redirection");
-			exit(EXIT_FAILURE);
-		}
-		close(exe->pipefd[0]);
-		close(exe->pipefd[1]);
-		if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
-		{
-			dup2(exe->fd[1], STDOUT_FILENO);
-			close (exe->fd[1]);
-		}
-		exec_commande(exe, cmds);
-		perror("Erreur d'exécution de la seule commande");
-		exit(1);
-	}
-	return ;
-}
-
 void	pipex(t_exe *exe)
 {
 	if (exe->nmb_cmd > 1) // gerer pipesfd[1]ici
@@ -170,8 +147,8 @@ void	pipex(t_exe *exe)
 			// fflush(stdout);
 			// exe->fd[1] = exe->pipefd[1];
 		}
-		close(exe->pipefd[1]);
 		close(exe->pipefd[0]);
+		close(exe->pipefd[1]);
 	}
 	return ;
 }
@@ -182,7 +159,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 	int prev_pipefd = -1;
 
 	i = exe->index_pid;
-	while (cmds)
+	while (cmds && cmds->cmd)
 	{
 		if (cmds->next)
 		{
@@ -193,8 +170,8 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			}
 		}
 		exe->pid[i] = fork(); // sauvgarder le pid pour waitpit() a la fin;
-		if (cmds == NULL)
-			return (0);
+		// if (cmds == NULL)
+		// 	return (0);
 		if (exe->pid[i] == -1)
 		{
 			free(exe->pid);
@@ -203,27 +180,33 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		}
 		if (exe->pid[i] == 0) // processus enfant
 		{
-			printf("Pour la commande : %s le pipefd[1] = %d\n", cmds->cmd[0], exe->pipefd[1]);
-			printf("prev est %d\n", prev_pipefd);
-			fflush(stdout);
+			// printf("Pour la commande : %s le pipefd[1] = %d\n", cmds->cmd[0], exe->pipefd[1]);
+			// printf("prev est %d\n", prev_pipefd);
+			// fflush(stdout);
 			exc_solo_cmd(exe, cmds);
 			if (cmds->prev) //not the first cmd, envoyer la sortie a l'entree
 			{
-				if (dup2(prev_pipefd, STDIN_FILENO) == -1)
+				// printf("dasdhsadasd\n");
+				if (prev_pipefd != STDIN_FILENO)
 				{
-					perror("Erreur dup2");
-					exit(EXIT_FAILURE);
+					if (dup2(prev_pipefd, STDIN_FILENO) == -1)
+					{
+						perror("Erreur dup2");
+						exit(EXIT_FAILURE);
+					}
+					close(prev_pipefd);
 				}
-				printf("STDIN est : %d\n", STDIN_FILENO);
-				fflush(stdout);
+				// printf("STDIN est : %d\n", STDIN_FILENO);
+				// fflush(stdout);
 				// dup2(exe->pipefd[1], STDIN_FILENO); // ??? pas sure
-				close(prev_pipefd);
 			}
 			if (!cmds->next) // the last command
 			{
-				dup2(1, STDOUT_FILENO);
+				if (dup2(STDOUT_FILENO, STDOUT_FILENO) == -1) {
+					perror("dup2 failed");
+					exit(EXIT_FAILURE);
+				}
 				// close(exe->pipefd[0]);
-				// close(exe->pipefd[1]);
 			}
 			if (handle_redir(exe, cmds) == -1)
 			{	
@@ -238,9 +221,9 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		}
 		if (cmds->next)
 		{
-			close(exe->pipefd[1]);
 			// if (prev_pipefd != -1)
-			// 	close(exe->prev_pipefd);
+			close(exe->pipefd[1]);
+			close(prev_pipefd);
 			prev_pipefd = exe->pipefd[0];
 		}
 		cmds = cmds->next;
@@ -251,9 +234,11 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		// printf("Index après incrémentation : %d\n", exe->index_pid);
 		// fflush(stdout);
 	}
-	if (prev_pipefd != -1)
+	// close(exe->pipefd[0]);
+	if (prev_pipefd != -1) // not the first cmd;
 	{
 		close(prev_pipefd);
+		// close(STDIN_FILENO);
 	}
 	// printf("index est %d:", exe->index_pid);
 	// fflush(stdout);
@@ -267,13 +252,4 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 	}
 	return (0);
 }
-	// while (i >= 0)
-	// {
-	// 	if (waitpid(exe->pid[i], NULL, 0) == -1) // Need to modifier pid as a tableau
-	// 	{
-	// 		perror("Error de exec parent");
-	// 		return (-1);
-	// 	}
-	// 	i--;
-	// }
-	// gerer exit() et dree pid avec la taille exe->num_cmd;
+
