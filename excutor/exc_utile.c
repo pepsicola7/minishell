@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2024/12/12 17:14:52 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/12 17:55:54 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*find_path(char *pathname, char *cmd)
 	int		i;
 
 	i = 0;
+	if (access(cmd, X_OK) == 0)
+		return(cmd);
 	sp_path = ft_split(pathname, ':');
 	while (sp_path[i])
 	{
@@ -44,7 +46,7 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 	}
 	if (cmds->cmd)
 	{
-		exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?
+			exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?
 		if (!exc_pathname)
 		{
 			perror("command not found\n");
