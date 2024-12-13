@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2024/12/12 17:55:54 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/13 17:24:38 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,26 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 {
 	char	*exc_pathname;
 
-	if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
-	{
-		dup2(exe->fd[1], STDOUT_FILENO);
-		close(exe->fd[1]);
-	}
+	// if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
+	// {
+	// 	printf("i should be there twice\n");
+	// 	fflush(stdout);
+	// 	if (dup2(exe->fd[1], STDOUT_FILENO) == -1)
+	// 	{
+	// 		perror("1dup2 failed");
+	// 		exit(EXIT_FAILURE);
+	// 	}
+	// 	// dup2(exe->fd[1], STDOUT_FILENO);
+	// 	// close(exe->fd[1]);
+		if (exe->hd_pipe[0] != -1) // there has a heredoc;
+		{
+			close(exe->hd_pipe[1]);
+			// close(exe->hd_pipe[0]);
+		}
+	// }
 	if (cmds->cmd)
 	{
-			exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?
+		exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?
 		if (!exc_pathname)
 		{
 			perror("command not found\n");
@@ -57,7 +69,6 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 		// printf("Avant executer fd[1] is : %d\n", exe->fd[1]);
 		// printf("Avant executer STDIN is : %d\n", STDIN_FILENO);
 		// printf("Avant executer STDOUT is : %d\n", STDOUT_FILENO);
-		// fflush(stdout);
 		if (execve(exc_pathname, cmds->cmd, exe->env) == -1)
 		{
 			perror("Erreur d'exécution de la commande");

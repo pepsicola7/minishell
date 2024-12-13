@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/12/12 17:05:10 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/13 17:29:37 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,21 @@ int	redir_heredoc(t_exe *exe, t_parser *cmds)
 		write(exe->hd_pipe[1], line, ft_strlen(line));
 		write(exe->hd_pipe[1], "\n", 1);
 	}
-	if (dup2(exe->hd_pipe[0], exe->fd[0]) == -1)
+	if (dup2(exe->hd_pipe[0], exe->fd[0]) == -1) //heredc change only fd[0] iic
 		return (-1);
-	exe->fd[1] = exe->hd_pipe[1];
+	close(exe->hd_pipe[0]);
+	// if (cmds->next)
+	// if (dup2(exe->hd_pipe[1], exe->fd[1]) == -1)
+	// 	return (-1);
 	// ici est juste pour changer la valeur de fd, pour que'il note le changement de la redirection, pcq dup2 change pas la valuer de fd;
-	dup2(exe->hd_pipe[1], exe->fd[1]);
+	// exe->fd[1] = exe->hd_pipe[1];
 	// printf("heredoc fd[1] is :%d\n", exe->fd[1]);
 	// printf("heredoc fd[0] is :%d\n", exe->fd[0]);
+	// printf("heredoc hd-pipe[1] est : %d\n", exe->hd_pipe[1]);
 	// fflush(stdout);
-	close(exe->hd_pipe[1]);
-	close(exe->hd_pipe[0]);
-	// close(exe->hd_pipe[1]);
+	// exe->fd[1] = exe->hd_pipe[1];
+	// printf("APRES fd[1] est : %d\n", exe->fd[1]);
+	// fflush(stdout);
 	return(0);
 }
 
@@ -119,8 +123,6 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 		redirection = redirection->next;
 	}
 	// printf("number of the cmds : %d\n", exe->nmb_cmd);
-	// printf("APRES fd[1] est : %d\n", exe->fd[1]);
-	// fflush(stdout);
 	return (0);
 }
 
@@ -128,19 +130,27 @@ void	pipex(t_exe *exe)
 {
 	if (exe->nmb_cmd > 1) // gerer pipesfd[1]ici
 	{
-		// if (exe->fd[1] != STDOUT_FILENO) // if there have a output deja;
-		// {
-		// 	printf("Pipe avec les redirections\n");
-		// 	fflush(stdout);
-		// 	close(exe->pipefd[1]);
-		// }
+		if (exe->fd[1] != STDOUT_FILENO) //with redirection
+		{
+			printf("Pipe avec les redirections\n");
+			fflush(stdout);
+			if (dup2(exe->fd[1], exe->pipefd[1]) == -1) {
+				perror("1dup2 failed");
+				exit(EXIT_FAILURE);
+			}
+			if (dup2(exe->pipefd[1], STDOUT_FILENO) == -1) {
+				perror("2dup2 failed");
+				exit(EXIT_FAILURE);
+			}
+			close(exe->fd[1]);
+		}
 		if (exe->fd[1] == STDOUT_FILENO) // sans redirections
 		{
-			// printf("Pipe sans les redirections\n");
+			printf("Pipe sans les redirections\n");
 			// printf("exe->pipefd[1] est :%d\n", exe->pipefd[1]);
 			// printf("Avant dup2, pipefd[1] = %d\n", exe->pipefd[1]);
 			if (dup2(exe->pipefd[1], STDOUT_FILENO) == -1) {
-				perror("dup2 failed");
+				perror("2dup2 failed");
 				exit(EXIT_FAILURE);
 			}
 			// printf("Après dup2\n");
@@ -203,7 +213,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			if (!cmds->next) // the last command
 			{
 				if (dup2(STDOUT_FILENO, STDOUT_FILENO) == -1) {
-					perror("dup2 failed");
+					perror("3dup2 failed");
 					exit(EXIT_FAILURE);
 				}
 				// close(exe->pipefd[0]);
@@ -213,7 +223,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 				perror("Erreur d'exécution de la redirection");
 				exit(EXIT_FAILURE);
 			}
-			printf("le pipefd[0] : %d le pipefd[1] = %d\n", exe->pipefd[0], exe->pipefd[1]);
+			// printf("le pipefd[0] : %d le pipefd[1] = %d\n", exe->pipefd[0], exe->pipefd[1]);
 			pipex(exe);
 			exec_commande(exe, cmds);
 			perror("Erreur d'exécution de la commande");
@@ -225,6 +235,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			close(exe->pipefd[1]);
 			close(prev_pipefd);
 			prev_pipefd = exe->pipefd[0];
+			printf("%d\n", prev_pipefd);
 		}
 		cmds = cmds->next;
 		exe->index_pid++; 
