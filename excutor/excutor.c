@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/12/12 17:14:35 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/18 14:50:38 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,13 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	}
 	cmd_temps = cmds;
 	count = 0;
-	while (cmd_temps && cmd_temps->cmd)
+	while (cmd_temps)// 	while (cmd_temps && cmd_temps->cmd) je le change pour fixer : < test | echo hello
 	{
 		count++;
 		cmd_temps = cmd_temps->next;
 	}
 	exe->nmb_cmd = count;
-	exe->pid = ft_calloc(count, sizeof(pid_t));
+	exe->pid = ft_calloc(count + 1, sizeof(pid_t));
 	if (!exe->pid)
 	{
 		free(exe);

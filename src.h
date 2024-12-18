@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/10 15:10:19 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/17 21:05:15 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,5 @@ int			exec_commande(t_exe *exe, t_parser *cmds);
 int			handle_redir(t_exe *exe, t_parser *cmds);
 int			redir_heredoc(t_exe *exe, t_parser *cmds);
 void		exc_solo_cmd(t_exe *exe, t_parser *cmds);
+int			handle_redir_solo(t_exe *exe, t_parser *cmds);
 #endif

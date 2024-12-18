@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2024/12/13 17:24:38 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/18 14:55:15 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,73 @@ void	exc_solo_cmd(t_exe *exe, t_parser *cmds)
 		exit(1);
 	}
 	return ;
+}
+
+int	handle_redir_solo(t_exe *exe, t_parser *cmds)
+{
+	t_lexer	*redirection;
+	int old_fd;
+	
+	redirection = cmds->redirections;
+	while (redirection) // && redirection->type != PIPE
+	{
+		if (redirection->type == REDIR_IN) // <
+		{
+			// printf("the value is : %s\n", redirection->value);
+			// fflush(stdout);
+			old_fd = open(redirection->value, O_RDONLY);
+			if (old_fd == -1)
+			{
+				perror("Erreur d'ouverture du fichier d'entree");
+				return (-1);
+			}
+			close(old_fd);
+		}
+		if (redirection->type == REDIR_OUT) // >
+		{
+			old_fd = open (redirection->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			// printf("the fd of redir_out%d\n", old_fd);
+			if (old_fd == -1)
+			{
+				perror("Erreur d'ouverture du fichier de sortie");
+				return (-1);
+			}
+			// if (dup2(old_fd, exe->fd[1]) == -1)
+			// {
+			// 	perror("Erreur dup2 pour REDIR_OUT");
+			// 	return (-1);
+			// }
+			// printf("avant fd[1] est : %d\n", exe->fd[1]);
+			// fflush(stdout);
+			// exe->fd[1] = old_fd;  // Pour refléter que la redirection est active
+			close(old_fd);
+		}
+		if (redirection->type == APPEND) // >> test le cas special apres
+		{
+			old_fd = open (redirection->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (old_fd == -1)
+			{
+				perror("Erreur d'ouverture du fichier en mode append");
+				return (-1);
+			}
+			// if (dup2(old_fd, exe->fd[1]) == -1)
+			// {
+			// 	perror("Erreur dup2 pour APPEND");
+			// 	return (-1);
+			// }
+			// exe->fd[1] = old_fd;
+			close(old_fd);
+		}
+		if (redirection->type == HEREDOC) // <<
+		{
+			if (redir_heredoc(exe, cmds) == -1)
+			{
+				perror("Erreur dup2 pour HERE_DOC");
+				return (-1);
+			}
+		}
+		redirection = redirection->next;
+	}
+	// printf("number of the cmds : %d\n", exe->nmb_cmd);
+	return (0);
 }
