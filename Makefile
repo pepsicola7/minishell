@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
+#    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 15:18:00 by tbartocc          #+#    #+#              #
-#    Updated: 2024/12/04 15:21:50 by peli             ###   ########.fr        #
+#    Updated: 2024/12/18 17:49:41 by tbartocc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SRC_COMMON =	builtins/cd.c \
 				lexer/token.c \
 				parser/handle_cases.c \
 				parser/parser.c \
+				add_env.c \
 				builtin.c \
 				free.c \
 				get_env.c \

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
+#    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 14:34:27 by tbartocc          #+#    #+#              #
-#    Updated: 2024/11/26 15:17:39 by peli             ###   ########.fr        #
+#    Updated: 2024/12/18 18:33:05 by tbartocc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ SRC =	ft_atoi.c \
 	ft_strlcat.c \
 	ft_strlcpy.c \
 	ft_strlen.c \
+	ft_strlen_c.c \
 	ft_strmapi.c \
 	ft_strcmp.c \
 	ft_strncmp.c \

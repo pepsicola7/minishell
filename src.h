@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   src.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/20 12:43:46 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/20 18:23:40 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,13 +116,18 @@ int			is_builtin(char *cmd);
 t_parser	*parse_lexer(t_lexer *tokens);
 
 // Main
+int			add_node(t_env *env, t_env *nw, int ret);
 void		free_cmds(t_parser *cmds);
 void		free_env(t_env *env);
 void		free_tokens(t_lexer *tokens);
 void		free_array(char	**str);
 char		*ft_getenv(char *var_name, t_env *env);
-void		print_env(t_env *env);
 t_env		*get_env(char **initial_env);
+char		*get_value(char *name, t_env *env);
+t_env		*ft_new_node(char *name, char *value);
+int			max_index(t_env *env);
+void		print_env(t_env *env);
+void		print_export(t_env *env);
 void		print_parser(t_parser *cmds);
 void		setup_signals(void);
 

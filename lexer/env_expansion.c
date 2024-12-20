@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:45:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/26 14:06:42 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/19 18:34:02 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	print_env(t_env *env)
 	t_env *tmp;
 
 	tmp = env;
-	printf("%d, %s=%s\n", tmp->index, tmp->name, tmp->value);
+	printf("%s=%s\n", tmp->name, tmp->value);
 	while (tmp && tmp->next)
 	{
 		tmp = tmp->next;
-		printf("%d, %s=%s\n", tmp->index, tmp->name, tmp->value);
+		printf("%s=%s\n", tmp->name, tmp->value);
 	}
 }
 
@@ -53,7 +53,8 @@ void	extract_var_name(const char *input, int *i, char *var_name)
 
 	// start = *i;
 	j = 0;
-	while (input[*i] && (isalnum(input[*i]) || input[*i] == '_'))
+	while (input[*i] && (ft_isalnum(input[*i])
+		|| input[*i] == '_' || input[*i] == '?'))
 	{
 		if (j < 127)
 			var_name[j++] = input[(*i)++];
@@ -85,7 +86,8 @@ char	*replace_env_variables(const char *input, t_env *env)
 	expanded_text = NULL;
 	while (input[i])
 	{
-		if (input[i] == '$' && (isalnum(input[i + 1]) || input[i + 1] == '_'))
+		if (input[i] == '$' && (ft_isalnum(input[i + 1])
+			|| input[i + 1] == '_' || input[i + 1] == '?'))
 		{
 			i++;
 			extract_var_name(input, &i, var_name);

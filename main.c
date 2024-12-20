@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/26 17:29:37 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/20 14:39:19 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	main(int ac, char **av, char **initial_env)
 	if (ac > 1)
 		return (printf("No args needed\n"), 0);
 	env = get_env(initial_env);
+	add_node(env, ft_new_node("?", "0"), 1);
 	while (1)
 	{
 		input = readline("minishell> ");
@@ -77,11 +78,11 @@ int	main(int ac, char **av, char **initial_env)
 			break ;
 		}
 		add_history(input);
+		// print_env(env);
 		tokens = lexer(input, &env);
 		// print_lexers(tokens);
 		cmds = parse_lexer(tokens);
 		// ft_print_tab(initial_env);
-		// print_env(env);
 		// print_parser(cmds);
 		excutor(env, cmds);
 		free_cmds(cmds);
