@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exc_utile.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2024/12/20 18:24:07 by tbartocc         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:00:14 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,9 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 
 	if (exe->hd_pipe[0] != -1) // there has a heredoc;
 	{
-		close(exe->hd_pipe[1]);
-		// close(exe->hd_pipe[0]);
+		printf("???\n");
+		close(exe->hd_pipe[0]);
+		close(exe->hd_pipe[0]);
 	}
 	if (cmds->cmd)
 	{

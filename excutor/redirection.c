@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/12/20 16:36:09 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/20 19:01:35 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ int	redir_heredoc(t_exe *exe, t_lexer *redirection)
 	fflush(stdin);
 	while (1)
 	{
-		// printf("line is : %s\n", line);
 		line = readline(">");
-		// sleep(1);
-		// printf("line is : %s\n", line);
 		if (ft_strcmp(line, redirection->value) == 0)
 		{
 			free(line);
@@ -39,6 +36,7 @@ int	redir_heredoc(t_exe *exe, t_lexer *redirection)
 		free(line);
 	}
 	close(exe->hd_pipe[1]);
+	// dup2(exe->hd_pipe[0], exe->fd[0]); suretout pas ici;
 	exe->fd[0] = exe->hd_pipe[0];
 	return(0);
 }
@@ -139,6 +137,7 @@ void	pipex(t_exe *exe)
 				perror("5dup2 failed");
 				exit(EXIT_FAILURE);
 			}
+			// dup2(exe->pipefd[0], STDIN_FILENO);
 			close(exe->fd[0]);
 		}
 		// printf("fd[1] est : %d\n", exe->fd[1]);
@@ -170,8 +169,6 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		// seul_redir(exe, cmds, prev_pipefd);
 		while (cmds && cmds->redirections && !cmds->cmd)
 		{
-			// printf("why i m here");
-			// fflush(STDIN_FILENO);
 			if (handle_redir_solo(exe, cmds) == -1)
 				perror("Erreur d'exécution de la redirection");
 			if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
@@ -186,6 +183,8 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		}
 		if (cmds && cmds->cmd)
 		{
+			// printf("why i m here");
+			// fflush(STDIN_FILENO);
 			if (cmds->next)
 			{
 				if (pipe(exe->pipefd) == -1)
