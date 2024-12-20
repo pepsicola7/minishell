@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/17 21:05:15 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/20 12:43:46 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,8 @@ char		**trans_env(t_env	*env_lst);
 int			pipeline(t_exe *exe, t_parser *cmds);
 int			exec_commande(t_exe *exe, t_parser *cmds);
 int			handle_redir(t_exe *exe, t_parser *cmds);
-int			redir_heredoc(t_exe *exe, t_parser *cmds);
+int			redir_heredoc(t_exe *exe, t_lexer *redirection);
 void		exc_solo_cmd(t_exe *exe, t_parser *cmds);
 int			handle_redir_solo(t_exe *exe, t_parser *cmds);
+int			redir_heredoc_solo(t_exe *exe, t_lexer *redirection);
 #endif

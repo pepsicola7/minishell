@@ -1,2 +1,1 @@
-le pipefd[0] : 3 le pipefd[1] = 4
-7
+0

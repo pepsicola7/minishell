@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2024/12/18 14:55:15 by peli             ###   ########.fr       */
+/*   Updated: 2024/12/20 16:28:19 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,11 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 {
 	char	*exc_pathname;
 
-	// if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
-	// {
-	// 	printf("i should be there twice\n");
-	// 	fflush(stdout);
-	// 	if (dup2(exe->fd[1], STDOUT_FILENO) == -1)
-	// 	{
-	// 		perror("1dup2 failed");
-	// 		exit(EXIT_FAILURE);
-	// 	}
-	// 	// dup2(exe->fd[1], STDOUT_FILENO);
-	// 	// close(exe->fd[1]);
-		if (exe->hd_pipe[0] != -1) // there has a heredoc;
-		{
-			close(exe->hd_pipe[1]);
-			// close(exe->hd_pipe[0]);
-		}
-	// }
+	if (exe->hd_pipe[0] != -1) // there has a heredoc;
+	{
+		close(exe->hd_pipe[1]);
+		// close(exe->hd_pipe[0]);
+	}
 	if (cmds->cmd)
 	{
 		exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?
@@ -65,14 +53,10 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 			free(exc_pathname);
 			exit(EXIT_FAILURE);
 		}
-		// printf("Avant executer fd[0] is : %d\n", exe->fd[0]);
-		// printf("Avant executer fd[1] is : %d\n", exe->fd[1]);
-		// printf("Avant executer STDIN is : %d\n", STDIN_FILENO);
-		// printf("Avant executer STDOUT is : %d\n", STDOUT_FILENO);
 		if (execve(exc_pathname, cmds->cmd, exe->env) == -1)
 		{
 			perror("Erreur d'exécution de la commande");
-			exit(EXIT_FAILURE);
+			// exit(EXIT_FAILURE);
 		}
 	}
 	exit(EXIT_SUCCESS);
@@ -92,13 +76,44 @@ void	exc_solo_cmd(t_exe *exe, t_parser *cmds)
 		if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
 		{
 			dup2(exe->fd[1], STDOUT_FILENO);
-			close (exe->fd[1]);
+			close(exe->fd[1]);
+		}
+		if (exe->fd[0] != STDIN_FILENO)
+		{
+			dup2(exe->fd[0], STDIN_FILENO);
+			close(exe->fd[0]);
 		}
 		exec_commande(exe, cmds);
 		perror("Erreur d'exécution de la seule commande");
 		exit(1);
 	}
 	return ;
+}
+
+int	redir_heredoc_solo(t_exe *exe, t_lexer *redirection)
+{
+	char	*line;
+
+	if (pipe(exe->hd_pipe) == -1)
+	{
+		perror("Erreur lors de la création du pipe");
+		exit(EXIT_FAILURE);
+	}
+	while (1)
+	{
+		line = readline(">");
+		if (ft_strcmp(line, redirection->value) == 0)
+		{
+			free(line);
+			break;
+		}
+		write(exe->hd_pipe[1], line, ft_strlen(line));
+		write(exe->hd_pipe[1], "\n", 1);
+		free(line);
+	}
+	close(exe->hd_pipe[0]);
+	close(exe->hd_pipe[1]);
+	return(0);
 }
 
 int	handle_redir_solo(t_exe *exe, t_parser *cmds)
@@ -130,14 +145,6 @@ int	handle_redir_solo(t_exe *exe, t_parser *cmds)
 				perror("Erreur d'ouverture du fichier de sortie");
 				return (-1);
 			}
-			// if (dup2(old_fd, exe->fd[1]) == -1)
-			// {
-			// 	perror("Erreur dup2 pour REDIR_OUT");
-			// 	return (-1);
-			// }
-			// printf("avant fd[1] est : %d\n", exe->fd[1]);
-			// fflush(stdout);
-			// exe->fd[1] = old_fd;  // Pour refléter que la redirection est active
 			close(old_fd);
 		}
 		if (redirection->type == APPEND) // >> test le cas special apres
@@ -158,7 +165,7 @@ int	handle_redir_solo(t_exe *exe, t_parser *cmds)
 		}
 		if (redirection->type == HEREDOC) // <<
 		{
-			if (redir_heredoc(exe, cmds) == -1)
+			if (redir_heredoc_solo(exe, redirection) == -1)
 			{
 				perror("Erreur dup2 pour HERE_DOC");
 				return (-1);
