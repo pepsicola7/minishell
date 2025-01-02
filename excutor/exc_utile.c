@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2024/12/20 19:00:14 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/02 14:47:04 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,6 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 {
 	char	*exc_pathname;
 
-	if (exe->hd_pipe[0] != -1) // there has a heredoc;
-	{
-		printf("???\n");
-		close(exe->hd_pipe[0]);
-		close(exe->hd_pipe[0]);
-	}
 	if (cmds->cmd)
 	{
 		exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?
@@ -91,45 +85,48 @@ void	exc_solo_cmd(t_exe *exe, t_parser *cmds)
 	return ;
 }
 
-int	redir_heredoc_solo(t_exe *exe, t_lexer *redirection)
-{
-	char	*line;
+// int	redir_heredoc_solo(t_exe *exe, t_lexer *redirection)
+// {
+// 	char	*line;
 
-	if (pipe(exe->hd_pipe) == -1)
-	{
-		perror("Erreur lors de la création du pipe");
-		exit(EXIT_FAILURE);
-	}
-	while (1)
-	{
-		line = readline(">");
-		if (ft_strcmp(line, redirection->value) == 0)
-		{
-			free(line);
-			break;
-		}
-		write(exe->hd_pipe[1], line, ft_strlen(line));
-		write(exe->hd_pipe[1], "\n", 1);
-		free(line);
-	}
-	close(exe->hd_pipe[0]);
-	close(exe->hd_pipe[1]);
-	return(0);
-}
+// 	if (pipe(exe->hd_pipe) == -1)
+// 	{
+// 		perror("Erreur lors de la création du pipe");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	while (1)
+// 	{
+// 		line = readline(">");
+// 		if (ft_strcmp(line, redirection->value) == 0)
+// 		{
+// 			free(line);
+// 			break;
+// 		}
+// 		write(exe->hd_pipe[1], line, ft_strlen(line));
+// 		write(exe->hd_pipe[1], "\n", 1);
+// 		free(line);
+// 	}
+// 	close(exe->hd_pipe[0]);
+// 	close(exe->hd_pipe[1]);
+// 	return(0);
+// }
 
 int	handle_redir_solo(t_exe *exe, t_parser *cmds)
 {
 	t_lexer	*redirection;
 	int old_fd;
 	
+	(void)exe;
 	redirection = cmds->redirections;
 	while (redirection) // && redirection->type != PIPE
 	{
-		if (redirection->type == REDIR_IN) // <
+		if (redirection->type == REDIR_IN || redirection->type == HEREDOC) // < or <<
 		{
 			// printf("the value is : %s\n", redirection->value);
 			// fflush(stdout);
 			old_fd = open(redirection->value, O_RDONLY);
+			if (redirection->type == HEREDOC)
+				unlink(redirection->value);
 			if (old_fd == -1)
 			{
 				perror("Erreur d'ouverture du fichier d'entree");
@@ -139,7 +136,7 @@ int	handle_redir_solo(t_exe *exe, t_parser *cmds)
 		}
 		if (redirection->type == REDIR_OUT) // >
 		{
-			old_fd = open (redirection->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			old_fd = open(redirection->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			// printf("the fd of redir_out%d\n", old_fd);
 			if (old_fd == -1)
 			{
@@ -150,7 +147,7 @@ int	handle_redir_solo(t_exe *exe, t_parser *cmds)
 		}
 		if (redirection->type == APPEND) // >> test le cas special apres
 		{
-			old_fd = open (redirection->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			old_fd = open(redirection->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (old_fd == -1)
 			{
 				perror("Erreur d'ouverture du fichier en mode append");
@@ -164,14 +161,14 @@ int	handle_redir_solo(t_exe *exe, t_parser *cmds)
 			// exe->fd[1] = old_fd;
 			close(old_fd);
 		}
-		if (redirection->type == HEREDOC) // <<
-		{
-			if (redir_heredoc_solo(exe, redirection) == -1)
-			{
-				perror("Erreur dup2 pour HERE_DOC");
-				return (-1);
-			}
-		}
+		// if (redirection->type == HEREDOC) // <<
+		// {
+		// 	if (redir_heredoc_solo(exe, redirection) == -1)
+		// 	{
+		// 		perror("Erreur dup2 pour HERE_DOC");
+		// 		return (-1);
+		// 	}
+		// }
 		redirection = redirection->next;
 	}
 	// printf("number of the cmds : %d\n", exe->nmb_cmd);

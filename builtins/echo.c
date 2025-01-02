@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/30 15:32:08 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:27:45 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ int	my_echo(t_env *env, t_parser *parser)
 	n = pass_args(parser, &i);
 	while (parser->cmd[i])
 	{
-		ft_printf("%s", parser->cmd[i]);
+		printf("%s", parser->cmd[i]);
 		if (parser->cmd[i + 1])
-			ft_printf(" ");
+			printf(" ");
 		i++;
 	}
 	if (n)

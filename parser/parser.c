@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:22:06 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/26 15:19:28 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/02 15:22:06 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,17 @@ void	add_redirection(t_parser *cmd, int redir_type, char *redir_value)
 {
 	t_lexer	*new_redir;
 	t_lexer	*tmp;
+	char	*hd_name;
 
-	new_redir = create_token(redir_type, redir_value);
+	if (redir_type == HEREDOC)
+	{
+		hd_name = create_heredoc(redir_value);
+		if (hd_name)
+			new_redir = create_token(redir_type, hd_name);
+		free(hd_name);
+	}
+	else
+		new_redir = create_token(redir_type, redir_value);
 	if (!cmd->redirections)
 		cmd->redirections = new_redir;
 	else

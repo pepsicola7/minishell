@@ -6,40 +6,40 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2024/12/20 19:01:35 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/02 14:23:16 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
 
-int	redir_heredoc(t_exe *exe, t_lexer *redirection)
-{
-	char	*line = NULL;
+// int	redir_heredoc(t_exe *exe, t_lexer *redirection)
+// {
+// 	char	*line = NULL;
 
-	if (pipe(exe->hd_pipe) == -1)
-	{
-		perror("Erreur lors de la création du pipe");
-		exit(EXIT_FAILURE);
-	}
-	printf("redirection value is : %s\n", redirection->value);
-	fflush(stdin);
-	while (1)
-	{
-		line = readline(">");
-		if (ft_strcmp(line, redirection->value) == 0)
-		{
-			free(line);
-			break;
-		}
-		write(exe->hd_pipe[1], line, ft_strlen(line));
-		write(exe->hd_pipe[1], "\n", 1);
-		free(line);
-	}
-	close(exe->hd_pipe[1]);
-	// dup2(exe->hd_pipe[0], exe->fd[0]); suretout pas ici;
-	exe->fd[0] = exe->hd_pipe[0];
-	return(0);
-}
+// 	if (pipe(exe->hd_pipe) == -1)
+// 	{
+// 		perror("Erreur lors de la création du pipe");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	printf("redirection value is : %s\n", redirection->value);
+// 	fflush(stdin);
+// 	while (1)
+// 	{
+// 		line = readline(">");
+// 		if (ft_strcmp(line, redirection->value) == 0)
+// 		{
+// 			free(line);
+// 			break;
+// 		}
+// 		write(exe->hd_pipe[1], line, ft_strlen(line));
+// 		write(exe->hd_pipe[1], "\n", 1);
+// 		free(line);
+// 	}
+// 	close(exe->hd_pipe[1]);
+// 	// dup2(exe->hd_pipe[0], exe->fd[0]); suretout pas ici;
+// 	exe->fd[0] = exe->hd_pipe[0];
+// 	return(0);
+// }
 
 int	handle_redir(t_exe *exe, t_parser *cmds)
 {
@@ -49,11 +49,11 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 	redirection = cmds->redirections;
 	while (redirection) // && redirection->type != PIPE
 	{
-		if (redirection->type == REDIR_IN) // <
+		if (redirection->type == REDIR_IN || redirection->type == HEREDOC) // < or <<
 		{
-			// printf("the value is : %s\n", redirection->value);
-			// fflush(stdout);
 			old_fd = open(redirection->value, O_RDONLY);
+			if (redirection->type == HEREDOC)
+				unlink(redirection->value);
 			if (old_fd == -1)
 			{
 				perror("Erreur d'ouverture du fichier d'entree");
@@ -65,7 +65,6 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				return (-1);
 			}
 			exe->fd[0] = old_fd;
-			// close(old_fd);
 		}
 		if (redirection->type == REDIR_OUT) // >
 		{
@@ -82,7 +81,6 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				return (-1);
 			}
 			exe->fd[1] = old_fd;  // Pour refléter que la redirection est active
-			// close(old_fd);
 		}
 		if (redirection->type == APPEND) // >> test le cas special apres
 		{
@@ -100,14 +98,14 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 			exe->fd[1] = old_fd;
 			// close(old_fd);
 		}
-		if (redirection->type == HEREDOC) // <<
-		{
-			if (redir_heredoc(exe, redirection) == -1)
-			{
-				perror("Erreur dup2 pour HERE_DOC");
-				return (-1);
-			}
-		}
+		// if (redirection->type == HEREDOC) // <<
+		// {
+		// 	if (redir_heredoc(exe, redirection) == -1)
+		// 	{
+		// 		perror("Erreur dup2 pour HERE_DOC");
+		// 		return (-1);
+		// 	}
+		// }
 		redirection = redirection->next;
 	}
 	return (0);
@@ -163,10 +161,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 
 	i = exe->index_pid;
 	while (cmds && (cmds->cmd || cmds->redirections))
-	{	
-		printf("i m here\n");
-		fflush(stdout);
-		// seul_redir(exe, cmds, prev_pipefd);
+	{
 		while (cmds && cmds->redirections && !cmds->cmd)
 		{
 			if (handle_redir_solo(exe, cmds) == -1)

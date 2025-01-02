@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2024/12/18 14:50:38 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/02 14:05:18 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,8 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	// while (++i != exe->nmb_cmd)
 	// 	*exe->pipefd = malloc(sizeof(int) * 2);
 	exe->index_pid = 0;
-	exe->hd_pipe[0] = -1;
-	exe->hd_pipe[1] = -1;
+	// exe->hd_pipe[0] = -1;
+	// exe->hd_pipe[1] = -1;
 	return(exe);
 }
 

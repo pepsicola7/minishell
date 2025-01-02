@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   src.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/23 16:02:36 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:27:14 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SRC_H
 # define SRC_H
 
-# include "./Printf/printf.h"
+# include "libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -76,7 +76,7 @@ typedef struct s_exe
 	int			nmb_cmd;
 	int			fd[2];
 	int			index_pid;
-	int			hd_pipe[2]; // que pour here doc;
+	// int			hd_pipe[2]; // que pour here doc;
 	int			prev_pipefd;
 }	t_exe;
 
@@ -102,6 +102,7 @@ int			handle_single_quotes(int i, char *input, char **word);
 int			handle_word(int i, char *input, t_lexer **tokens, t_env *env);
 t_lexer		*lexer(char *input, t_env **env);
 char		*replace_env_variables(const char *input, t_env *env);
+char		*create_heredoc(char *delimiter);
 
 // Parser
 void		add_argument_to_cmd(t_parser *cmd, char *arg);
