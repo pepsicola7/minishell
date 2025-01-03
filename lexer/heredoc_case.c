@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:26:13 by peli              #+#    #+#             */
-/*   Updated: 2025/01/02 15:43:39 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/03 18:08:41 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,26 +53,23 @@ static char	*compose_heredoc_name(int hd_index)
 
 static void	write_to_heredoc(int fd, char *delimiter)
 {
-	// Consider replacing GNL with readline here
 	char	*line;
 
-	ft_putstr_fd("> ", STDOUT_FILENO);
-	line = get_next_line(STDIN_FILENO);
+	g_signum = 0;
+	line = get_user_input("> ");
 	while (line)
 	{
-		line[ft_strlen(line) - 1] = 0;
 		if (!ft_strcmp(line, delimiter))
 			break ;
 		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		free(line);
-		ft_putstr_fd("> ", STDOUT_FILENO);
-		line = get_next_line(STDIN_FILENO);
+		line = get_user_input("> ");
 	}
 	free(line);
-	if (!line)
+	if (g_signum == EOF)
 	{
-		ft_putstr_fd("\nminishell: warning: here-document ", STDERR_FILENO);
+		ft_putstr_fd("minishell: warning: here-document ", STDERR_FILENO);
 		ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
 		ft_putstr_fd(delimiter, STDERR_FILENO);
 		ft_putstr_fd("')\n", STDERR_FILENO);

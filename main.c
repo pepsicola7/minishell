@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/20 14:39:19 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/03 18:15:18 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "src.h"
+
+int	g_signum;
+
+void	update_exit_code_in_env(t_env *env)
+{
+	char	*str_num;
+
+	str_num = ft_itoa(g_signum);
+	add_node(env, ft_new_node("?", str_num), 1);
+	free(str_num);
+}
 
 void	print_lexers(t_lexer *tokens)
 {
@@ -56,6 +67,25 @@ void	print_parser(t_parser *cmds)
 	}
 }
 
+char	*get_user_input(const char *prompt)
+{
+	static int	prev_signum;
+	int			stdin_dup;
+	char		*line;
+
+	prev_signum = g_signum;
+	g_signum = 0;
+	stdin_dup = dup(STDIN_FILENO);
+	line = readline(prompt);
+	dup2(stdin_dup, STDIN_FILENO);
+	close(stdin_dup);
+	if (!line && !g_signum)
+		g_signum = EOF;
+	else if (g_signum == SIGINT && !prev_signum)
+		printf("\n");
+	return (line);
+}
+
 int	main(int ac, char **av, char **initial_env)
 {
 	char		*input;
@@ -63,31 +93,44 @@ int	main(int ac, char **av, char **initial_env)
 	t_parser	*cmds;
 	t_env		*env;
 
-	setup_signals();
+	g_signum = 0;
+	setup_signals(0);
 	(void)av;
 	if (ac > 1)
 		return (printf("No args needed\n"), 0);
 	env = get_env(initial_env);
 	add_node(env, ft_new_node("?", "0"), 1);
-	while (1)
+	while (g_signum != EOF)
 	{
-		input = readline("minishell> ");
-		if (!input)
+		input = get_user_input("minishell> ");
+		if (input)
 		{
-			printf("exit\n");
-			break ;
+			add_history(input);
+			// print_env(env);
+			tokens = lexer(input, &env);
+			// print_lexers(tokens);
+			cmds = parse_lexer(tokens);
+			// ft_print_tab(initial_env);
+			// print_parser(cmds);
+			if (g_signum == SIGINT)
+			{
+				t_lexer *redirection = cmds->redirections;
+				while (redirection)
+				{
+					if (redirection->type == HEREDOC)
+						unlink(redirection->value);
+					redirection = redirection->next;
+				}
+			}
+			else
+			{
+				executor(env, cmds);
+				update_exit_code_in_env(env);
+			}
+			free_cmds(cmds);
+			free_tokens(tokens);
+			free(input);
 		}
-		add_history(input);
-		// print_env(env);
-		tokens = lexer(input, &env);
-		// print_lexers(tokens);
-		cmds = parse_lexer(tokens);
-		// ft_print_tab(initial_env);
-		// print_parser(cmds);
-		excutor(env, cmds);
-		free_cmds(cmds);
-		free_tokens(tokens);
-		free(input);
 	}
 	free_env(env);
 	return (0);

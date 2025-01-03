@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   excutor.c                                          :+:      :+:    :+:   */
+/*   executor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2025/01/02 14:05:18 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/03 17:32:41 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,18 +132,12 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 	exe->fd[0] = STDIN_FILENO; // Input;
 	exe->fd[1] = STDOUT_FILENO; // Output;
 	exe->pipefd[0] = -1;
-	exe->pipefd[1] = -1; // garde ces deux lignes, sinon cat ne marche pas;
-	// exe->pipefd = malloc(sizeof(int *) * exe->nmb_cmd);
-	// int i = -1;
-	// while (++i != exe->nmb_cmd)
-	// 	*exe->pipefd = malloc(sizeof(int) * 2);
+	exe->pipefd[1] = -1;
 	exe->index_pid = 0;
-	// exe->hd_pipe[0] = -1;
-	// exe->hd_pipe[1] = -1;
 	return(exe);
 }
 
-int	excutor(t_env *env, t_parser *cmds)
+int	executor(t_env *env, t_parser *cmds)
 {
 	t_exe	*exe;
 
@@ -161,121 +155,6 @@ int	excutor(t_env *env, t_parser *cmds)
 		}
 		return (0);
 	}
-	if (pipeline(exe, cmds) == -1)
-	{
-		printf ("Erreur lors de l'exécution externe\n");
-		return (-1);
-	}
-	return (0);
+	g_signum = pipeline(exe, cmds);
+	return (g_signum);
 }
-/*si j'ai besoin ft_calloc pour pipefd : 
-int	exec_externe(t_exe *exe, t_parser *cmds)
-{
-	int		*pipefd;
-	t_parser	*cmd_temps;
-	int		nbr_pipes;
-	int		count;
-	int		i;
-cat | cat | ls
-	cmd_temps = cmds;
-	count = 0;
-	while (cmd_temps->cmd)
-	{
-		count++;
-		cmd_temps = cmd_temps->next;
-	}
-	exe->nmb_cmd = count;
-	pipefd = ft_calloc(((count - 1) * 2) * sizeof(int));//need to free a la fon d'execution;
-	if (!pipefd)
-		return (-1);
-	exe->pipefd = pipefd;
-	i = 0;
-	while (i < count - 1)
-	{
-		if (pipe(pipefd + i * 2) == -1) //je comprends pas la facon d'ecrire ici
-		{
-			perror ("Erreur lors de la création du pipe");
-			free(pipefd);
-			return (-1);
-		}
-		i++;
-	}
-	if (exec_redirection(exe, cmds) == -1)
-	{print_env(env_lst);
-		printf("name : %s, value : %s\n", env_lst->name, env_lst->value);
-		free(pipefd);
-		return (-1);
-	}
-	free (pipefd);
-	return (0);
-}*/
-	// 			}
-// ici faut gerer les redirection et le pipe
-// minishell> echo "hello world" > output.txt
-// Token: echo (Type: 0)
-// Token: hello world (Type: 0)
-// Token: > (Type: 5)
-// Token: output.txt (Type: 0)
-// Command:
-//   Builtin: Yes
-//   Cmds: [echo] [hello world] 
-//   Redirections:
-//     Type: 5, Value: output.txt
-//   Number of redirections: 1
-/*
-char	**trans_env(t_env	*env_lst)
-{
-	int			i;
-	int			count;
-	t_env		*temp;
-	char		**env;
-	int			len_name;
-	int			len_value;
-
-	i = 0;
-	count = 0;
-	temp = env_lst;
-	while (temp)
-	{
-		count++;
-		temp = temp->next;
-	}
-	printf ("The count of env is : %d", count);
-	fflush(stdout);
-	env = ft_calloc((count + 1) * sizeof(char *)); // need to free;
-	if (!env)
-	{
-		perror("Erreur d'allocation mémoire");
-		return (NULL);
-	}
-	while (i < count)
-	{
-		print_env(env_lst);
-		printf("name : %s, value : %s\n", env_lst->name, env_lst->value);
-		
-		len_name = ft_strlen(env_lst->name);
-		len_value = ft_strlen(env_lst->value);
-		env[i] = ft_calloc ((len_name + len_value + 2) * sizeof(char));//need a boucle to free;
-		if (!env[i])
-		{
-			perror("Erreur d'allocation mémoire");
-			while (i >= 0)
-			{
-				free(env[i]);
-				i--;
-			}
-			return (NULL);
-		}
-		env[i] = ft_strcat(env_lst->name, "=");
-		env[i] = ft_strcat(env[i] ,env_lst->value);
-		// if (!env_lst->next)
-		// 	break ;
-		env_lst = env_lst->next;
-		i++;
-		printf ("The index of env is : %d \n", i);
-		fflush(stdout);
-	}	
-	env[i] = "\0";
-	return (env);
-}
-*/

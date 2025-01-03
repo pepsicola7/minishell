@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/02 15:27:14 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/03 17:58:20 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+extern int	g_signum;
 
 typedef enum token
 {
@@ -61,7 +63,6 @@ typedef struct s_parser
 	char			**cmd; // execve recoit un **;
 	int				(*builtin)(t_env *, struct s_parser *);
 	int				num_redirections;
-	// char			*hd_file_name; stock in a pipe instead of a file;
 	t_lexer			*redirections;
 	struct s_parser	*next;
 	struct s_parser	*prev;
@@ -76,7 +77,6 @@ typedef struct s_exe
 	int			nmb_cmd;
 	int			fd[2];
 	int			index_pid;
-	// int			hd_pipe[2]; // que pour here doc;
 	int			prev_pipefd;
 }	t_exe;
 
@@ -130,18 +130,19 @@ int			max_index(t_env *env);
 void		print_env(t_env *env);
 void		print_export(t_env *env);
 void		print_parser(t_parser *cmds);
-void		setup_signals(void);
+void		setup_signals(int in_child);
+char		*get_user_input(const char *prompt);
 
-// Excutor
-int			excutor(t_env *env, t_parser *cmds);
+// Executor
+int			executor(t_env *env, t_parser *cmds);
 t_exe		*init_exe(t_env *env, t_parser *cmds);
 char		*get_pathname(t_env *env_lst);
 char		**trans_env(t_env	*env_lst);
 int			pipeline(t_exe *exe, t_parser *cmds);
 int			exec_commande(t_exe *exe, t_parser *cmds);
 int			handle_redir(t_exe *exe, t_parser *cmds);
-int			redir_heredoc(t_exe *exe, t_lexer *redirection);
+// int			redir_heredoc(t_exe *exe, t_lexer *redirection);
 void		exc_solo_cmd(t_exe *exe, t_parser *cmds);
 int			handle_redir_solo(t_exe *exe, t_parser *cmds);
-int			redir_heredoc_solo(t_exe *exe, t_lexer *redirection);
+// int			redir_heredoc_solo(t_exe *exe, t_lexer *redirection);
 #endif

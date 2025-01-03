@@ -6,40 +6,11 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2025/01/02 14:23:16 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/03 17:37:26 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
-
-// int	redir_heredoc(t_exe *exe, t_lexer *redirection)
-// {
-// 	char	*line = NULL;
-
-// 	if (pipe(exe->hd_pipe) == -1)
-// 	{
-// 		perror("Erreur lors de la création du pipe");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	printf("redirection value is : %s\n", redirection->value);
-// 	fflush(stdin);
-// 	while (1)
-// 	{
-// 		line = readline(">");
-// 		if (ft_strcmp(line, redirection->value) == 0)
-// 		{
-// 			free(line);
-// 			break;
-// 		}
-// 		write(exe->hd_pipe[1], line, ft_strlen(line));
-// 		write(exe->hd_pipe[1], "\n", 1);
-// 		free(line);
-// 	}
-// 	close(exe->hd_pipe[1]);
-// 	// dup2(exe->hd_pipe[0], exe->fd[0]); suretout pas ici;
-// 	exe->fd[0] = exe->hd_pipe[0];
-// 	return(0);
-// }
 
 int	handle_redir(t_exe *exe, t_parser *cmds)
 {
@@ -47,7 +18,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 	int old_fd;
 	
 	redirection = cmds->redirections;
-	while (redirection) // && redirection->type != PIPE
+	while (redirection)
 	{
 		if (redirection->type == REDIR_IN || redirection->type == HEREDOC) // < or <<
 		{
@@ -69,7 +40,6 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 		if (redirection->type == REDIR_OUT) // >
 		{
 			old_fd = open (redirection->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			// printf("the fd of redir_out%d\n", old_fd);
 			if (old_fd == -1)
 			{
 				perror("Erreur d'ouverture du fichier de sortie");
@@ -96,16 +66,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				return (-1);
 			}
 			exe->fd[1] = old_fd;
-			// close(old_fd);
 		}
-		// if (redirection->type == HEREDOC) // <<
-		// {
-		// 	if (redir_heredoc(exe, redirection) == -1)
-		// 	{
-		// 		perror("Erreur dup2 pour HERE_DOC");
-		// 		return (-1);
-		// 	}
-		// }
 		redirection = redirection->next;
 	}
 	return (0);
@@ -117,8 +78,6 @@ void	pipex(t_exe *exe)
 	{
 		if (exe->fd[1] != STDOUT_FILENO) //with redirection
 		{
-			printf("Pipe avec les redirections\n");
-			fflush(stdout);
 			if (dup2(exe->fd[1], exe->pipefd[1]) == -1)
 			{
 				perror("1dup2 failed");
@@ -128,23 +87,15 @@ void	pipex(t_exe *exe)
 		}
 		if (exe->fd[0] != STDIN_FILENO)
 		{
-			printf("Pipe avec les redirections\n");
-			fflush(stdout);
 			if (dup2(exe->fd[0], STDIN_FILENO) == -1)
 			{
 				perror("5dup2 failed");
 				exit(EXIT_FAILURE);
 			}
-			// dup2(exe->pipefd[0], STDIN_FILENO);
 			close(exe->fd[0]);
 		}
-		// printf("fd[1] est : %d\n", exe->fd[1]);
-		if (exe->fd[1] == STDOUT_FILENO) // sans redirections
+		if (dup2(exe->pipefd[1], STDOUT_FILENO) == -1)
 		{
-			printf("Pipe sans les redirections\n");
-			fflush(stdout);
-		}
-		if (dup2(exe->pipefd[1], STDOUT_FILENO) == -1) {
 			perror("2dup2 failed");
 			exit(EXIT_FAILURE);
 		}
@@ -153,6 +104,7 @@ void	pipex(t_exe *exe)
 	}
 	return ;
 }
+
 
 int	pipeline(t_exe *exe, t_parser *cmds)
 {
@@ -171,23 +123,17 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 				if (prev_pipefd != STDIN_FILENO)
 					close(prev_pipefd);
 			}
-			if (dup2(1, STDOUT_FILENO) == -1) 
-				perror("3dup2 failed");
 			cmds = cmds->next;
 			exe->nmb_cmd -= 1;
 		}
 		if (cmds && cmds->cmd)
 		{
-			// printf("why i m here");
-			// fflush(STDIN_FILENO);
 			if (cmds->next)
 			{
 				if (pipe(exe->pipefd) == -1)
 					perror("Erreur lors de la création du pipe");
 			}
 			exe->pid[i] = fork(); // sauvgarder le pid pour waitpit() a la fin;
-			// if (cmds == NULL)
-			// 	return (0);
 			if (exe->pid[i] == -1)
 			{
 				free(exe->pid);
@@ -196,8 +142,6 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			}
 			if (exe->pid[i] == 0) // processus enfant
 			{
-				// printf("Pour la commande : %s le pipefd[1] = %d\n", cmds->cmd[0], exe->pipefd[1]);
-				// printf("prev est %d\n", prev_pipefd);
 				exc_solo_cmd(exe, cmds);
 				if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
 				{
@@ -207,12 +151,6 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 							perror("Erreur dup2");
 						close(prev_pipefd);
 					}
-				}
-				if (!cmds->next) // the last command
-				{
-					if (dup2(STDOUT_FILENO, STDOUT_FILENO) == -1)
-						perror("3dup2 failed");
-					// close(exe->pipefd[0]);
 				}
 				if (handle_redir(exe, cmds) == -1)
 					perror("Erreur d'exécution de la redirection");
@@ -224,8 +162,6 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			}
 			if (cmds && cmds->next) // not the last cmd;
 			{
-				// if (prev_pipefd != -1)
-				// {
 					close(exe->pipefd[1]);
 					close(prev_pipefd);
 					prev_pipefd = exe->pipefd[0];
@@ -235,24 +171,33 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			exe->index_pid++; 
 		}
 	}
-	// close(exe->pipefd[0]);
 	if (prev_pipefd != -1) // not the first cmd;
-	{
 		close(prev_pipefd);
-		// close(STDIN_FILENO);
-	}
-	// printf("index est %d:", exe->index_pid);
-	// fflush(stdout);
+	
+	// WAIT
+	int	status;
+	int	signal_number;
+	int	exit_code;
+
+	setup_signals(0);
 	int j = 0;
-	while( j < exe->index_pid)
+	while(j < exe->index_pid)
 	{
-		if (waitpid(exe->pid[j], NULL, 0) == -1)
-		{
-			perror("Error during waitpid");
-			return -1;
-		}
+		while (waitpid(exe->pid[j], &status, 0) < 0)
+			;
 		j++;
 	}
-	return (0);
+	exit_code = 0;
+	if (WIFEXITED(status))
+		exit_code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		signal_number = WTERMSIG(status);
+		exit_code = 128 + signal_number;
+		if (signal_number == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)", STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
+	}
+	return (exit_code);
 }
 

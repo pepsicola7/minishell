@@ -1,20 +1,77 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_OLD.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 21:31:24 by peli              #+#    #+#             */
-/*   Updated: 2025/01/02 15:32:28 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/03 16:33:55 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 5
+# define BUFFER_SIZE 42
 #endif
+
+// char	*ft_strdup_(char *src)
+// {
+// 	char	*dest;
+// 	int		i;
+
+// 	i = 0;
+// 	while (src[i])
+// 		i++;
+// 	dest = (char *)malloc(sizeof(char) * (i + 1));
+// 	if (!dest)
+// 		return (NULL);
+// 	i = 0;
+// 	while (src[i])
+// 	{
+// 		dest[i] = src[i];
+// 		i++;
+// 	}
+// 	dest[i] = '\0';
+// 	return (dest);
+// }
+
+// char	*get_next_line(int fd)
+// {
+// 	static char	buffer[BUFFER_SIZE];
+// 	static int	buffer_read = 0;
+// 	static int	buffer_pos = 0;
+// 	char		*line;
+// 	int			i;
+	
+// 	line = malloc(70000);
+// 	if (fd < 0 || BUFFER_SIZE <= 0 || !(line))
+// 		return (NULL);
+// 	i = 0;
+// 	while (1)
+// 	{
+// 		if (buffer_pos >= buffer_read)
+// 		{
+// 			buffer_read = read(fd, buffer, BUFFER_SIZE);
+// 			buffer_pos = 0;
+// 			if (buffer_read <= 0)
+// 			{
+// 				if (i == 0) // Rien n'a été lu
+// 				{
+// 					free(line);
+// 					return (NULL);
+// 				}
+// 				break;
+// 			}
+// 		}
+// 		line[i++] = buffer[buffer_pos++];
+// 		if (line[i - 1] == '\n') // Check après l'ajout
+// 			break;
+// 	}
+// 	line[i] = '\0';
+// 	return (ft_strdup_(line));
+// }
 
 static int	nextelse(int a, char **nextstr_ptr)
 {
