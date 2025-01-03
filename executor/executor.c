@@ -51,19 +51,22 @@ char	**trans_env(t_env	*env_lst)
 			fprintf(stderr, "env_lst ou ses champs sont invalides\n");
 			return (NULL);
 		}
-		res[i] = ft_calloc(sizeof(char), sizeof(char)
-			* (ft_strlen(env_lst->name) + ft_strlen(env_lst->value) + 2));
-		if (!res[i])
+		if (strcmp(env_lst->name, "?") != 0)
 		{
-			perror("Erreur d'allocation mémoire");
-			while (--i >= 0)
-				free(res[i]);
-			free(res);
-			return (NULL);
+			res[i] = ft_calloc(sizeof(char), sizeof(char)
+				* (ft_strlen(env_lst->name) + ft_strlen(env_lst->value) + 2));
+			if (!res[i])
+			{
+				perror("Erreur d'allocation mémoire");
+				while (--i >= 0)
+					free(res[i]);
+				free(res);
+				return (NULL);
+			}
+			ft_strcat(res[i], env_lst->name);
+			ft_strcat(res[i], "=");
+			ft_strcat(res[i], env_lst->value);
 		}
-		ft_strcat(res[i], env_lst->name);
-		ft_strcat(res[i], "=");
-		ft_strcat(res[i], env_lst->value);
 		env_lst = env_lst->next;
 		i++;
 	}
