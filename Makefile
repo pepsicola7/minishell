@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
+#    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 15:18:00 by tbartocc          #+#    #+#              #
-#    Updated: 2025/01/03 17:35:41 by peli             ###   ########.fr        #
+#    Updated: 2025/01/03 18:58:19 by tbartocc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
 LDFLAGS = -lreadline -lhistory -lncurses
 
 LIBFT = ./libft

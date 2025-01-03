@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exc_utile.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2025/01/03 18:25:37 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/03 18:57:11 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 		}
 		setup_signals(1);
 		if (execve(exc_pathname, cmds->cmd, exe->env) == -1)
-			perror("Erreur d'exécution de la commande");
+		{
+			printf("%s: command not found\n", cmds->cmd[0]);
+			// exit(EXIT_FAILURE);
+		}
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -60,7 +63,7 @@ void	exc_solo_cmd(t_exe *exe, t_parser *cmds)
 	{
 		if (handle_redir(exe, cmds) == -1)
 		{	
-			perror("Erreur d'exécution de la redirection");
+			// perror("Erreur d'exécution de la redirection");
 			exit(EXIT_FAILURE);
 		}
 		close(exe->pipefd[0]);
