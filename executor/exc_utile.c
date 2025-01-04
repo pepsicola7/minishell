@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exc_utile.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2025/01/03 18:57:11 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:13:24 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,32 @@ char	*find_path(char *pathname, char *cmd)
 	if (access(cmd, X_OK) == 0)
 		return(cmd);
 	sp_path = ft_split(pathname, ':');
+	if (!sp_path)
+		return (NULL);
 	while (sp_path[i])
 	{
 		path = ft_strjoin(sp_path[i], "/");
-		path = ft_strjoin(path, cmd);
+		if (!path)
+			break;
+		char	*path1 = ft_strdup(path);
+		free(path);
+		path = ft_strjoin(path1, cmd);
+		free(path1);
+		if (!path)
+		{
+			free(path1);
+			break;
+		}
 		if (access(path, X_OK) == 0)
 			break;
 		free(path);
+		path = NULL;
 		i++;
 	}
+	i = 0;
+	while (sp_path[i]) // Libère chaque chaîne du tableau sp_path
+		free(sp_path[i++]);
+	free(sp_path);
 	return (path);
 }
 

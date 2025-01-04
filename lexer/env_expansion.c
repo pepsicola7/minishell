@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:45:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/19 18:34:02 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:16:31 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*concat(char *expanded_text, char *new_part)
 	if (expanded_text == NULL)
 		return (ft_strdup(new_part));
 	new_text = ft_strjoin(expanded_text, new_part);
-	// free(expanded_text);
+	free(expanded_text);
 	return (new_text);
 }
 

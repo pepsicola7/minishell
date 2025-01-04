@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2025/01/03 18:54:00 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/04 17:40:45 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			}
 			exe->nmb_cmd -= 1;
 			cmds = cmds->next;
-			exe->index_pid++; 
+			exe->index_pid++;
 		}
 	}
 	if (prev_pipefd != -1) // not the first cmd;

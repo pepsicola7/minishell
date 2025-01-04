@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
+#    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 15:18:00 by tbartocc          #+#    #+#              #
-#    Updated: 2025/01/03 18:58:19 by tbartocc         ###   ########.fr        #
+#    Updated: 2025/01/04 18:39:31 by peli             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g3 #-fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -g3 -fsanitize=address
 LDFLAGS = -lreadline -lhistory -lncurses
 
 LIBFT = ./libft
@@ -27,6 +27,7 @@ SRC_COMMON =	builtins/cd.c \
 		executor/executor.c \
 		executor/redirection.c \
 		executor/exc_utile.c\
+		executor/init_exc.c\
 		lexer/env_expansion.c \
 		lexer/heredoc_case.c \
 		lexer/lexer.c \

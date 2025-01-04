@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/03 17:58:20 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/04 18:38:52 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void		free_cmds(t_parser *cmds);
 void		free_env(t_env *env);
 void		free_tokens(t_lexer *tokens);
 void		free_array(char	**str);
+void		free_exe(t_exe *exe);
 char		*ft_getenv(char *var_name, t_env *env);
 t_env		*get_env(char **initial_env);
 char		*get_value(char *name, t_env *env);

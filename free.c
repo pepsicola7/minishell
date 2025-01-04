@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:35:56 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/10 15:08:43 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/04 18:08:49 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,11 @@ void	free_array(char	**str)
 	}
 	free(str);
 	return ;
+}
+
+void	free_exe(t_exe *exe)
+{
+	free_array(exe->env);
+	free(exe->pid);
+	free(exe);
 }

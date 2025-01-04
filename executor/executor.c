@@ -44,14 +44,17 @@ char	**trans_env(t_env	*env_lst)
 		tmp = tmp->next;
 	}
 	res = ft_calloc( (count + 1), sizeof(char *));
+	if (!res)
+		return (NULL);
 	while (i < count)
 	{
 		if (!env_lst || !env_lst->name || !env_lst->value)
 		{
+			free (res);
 			fprintf(stderr, "env_lst ou ses champs sont invalides\n");
 			return (NULL);
 		}
-		if (strcmp(env_lst->name, "?") != 0)
+		if (ft_strcmp(env_lst->name, "?") != 0)
 		{
 			res[i] = ft_calloc(sizeof(char), sizeof(char)
 				* (ft_strlen(env_lst->name) + ft_strlen(env_lst->value) + 2));
@@ -145,9 +148,8 @@ int	executor(t_env *env, t_parser *cmds)
 	t_exe	*exe;
 
 	exe = NULL;
-	print_parser(cmds);
+	// print_parser(cmds);
 	// print_env(env);
-	exe = init_exe(env, cmds);
 	// if this is a bulltin solo; (&& cmds->next == NULL && cmds->prev == NULL)
 	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL && cmds->num_redirections == 0)
 	{
@@ -158,6 +160,8 @@ int	executor(t_env *env, t_parser *cmds)
 		}
 		return (0);
 	}
+	exe = init_exe(env, cmds);
 	g_signum = pipeline(exe, cmds);
+	free_exe(exe);
 	return (g_signum);
 }
