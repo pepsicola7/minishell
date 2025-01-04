@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2025/01/04 18:13:24 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/04 20:06:19 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 		exc_pathname = find_path(exe->pathname, cmds->cmd[0]); // check cmd[0] faut parcourir dans la commande?
 		if (!exc_pathname)
 		{
-			perror("command not found\n");
+			ft_printf(2, "%s: command not found\n", cmds->cmd[0]);
 			free(exc_pathname);
 			exit(EXIT_FAILURE);
 		}

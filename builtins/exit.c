@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/04 19:32:35 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/04 19:41:24 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	my_exit(t_env *env, struct s_parser *parser)
 	int		exit_code;
 	char	*str;
 
+	
 	printf("exit\n");
 	// (void)env;
 	exit_code = 0;
@@ -59,11 +60,9 @@ int	my_exit(t_env *env, struct s_parser *parser)
 	else
 		exit_code = 1;
 	str = ft_itoa(exit_code);
-	printf("code : %d\n", exit_code);
 	add_node(env, ft_new_node("?", str), 1);
 	free(str);
 	print_env(env);
 	exit(exit_code);
-	printf("TEST\n");
 	return (exit_code);
 }

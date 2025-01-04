@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/02 15:24:13 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/04 20:06:00 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <limits.h>
 # include <fcntl.h>
 # include <stdio.h>
+# include <stdarg.h>
 
 typedef struct s_list
 {
@@ -87,5 +88,13 @@ int		ft_tablen(char **tab);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
 char	*get_next_line(int fd);
+int		ft_printf(int fd, const char *format, ...);
+int		ft_putchar_(int fd, char c);
+int		ft_putnbr_(int fd, int i);
+int		ft_putnbr_u(int fd, unsigned int i);
+int		ft_putnbr_hexa(int fd, unsigned long long n, char *base);
+int		ft_putstr_(int fd, char *s);
+int		ft_put_p(int fd, unsigned long long n);
+int		ft_format(int fd, char c, va_list args);
 
 #endif

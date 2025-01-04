@@ -151,7 +151,7 @@ int	executor(t_env *env, t_parser *cmds)
 	// print_parser(cmds);
 	// print_env(env);
 	// if this is a bulltin solo; (&& cmds->next == NULL && cmds->prev == NULL)
-	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL && cmds->num_redirections == 0)
+	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL)
 	{
 		if (cmds->builtin(env, cmds) == -1)
 		{

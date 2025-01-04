@@ -6,7 +6,7 @@
 #    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 14:34:27 by tbartocc          #+#    #+#              #
-#    Updated: 2025/01/02 15:33:57 by peli             ###   ########.fr        #
+#    Updated: 2025/01/04 19:54:02 by peli             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,8 @@ SRC =	ft_atoi.c \
 	ft_tablen.c \
 	ft_tolower.c \
 	ft_toupper.c \
+	ft_printf.c \
+	ft_fonction.c \
 	get_next_line_OLD.c
 
 INCLUDE = includes
