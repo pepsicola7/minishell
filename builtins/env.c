@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/26 15:33:35 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/03 19:12:53 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	my_env(t_env *env, t_parser *parser)
 	(void)parser;
 	while (env)
 	{
-		printf("%s=%s\n", env->name, env->value);
+		if (ft_strcmp(env->name, "?"))
+			printf("%s=%s\n", env->name, env->value);
 		env = env->next;
 	}
 	return (0);

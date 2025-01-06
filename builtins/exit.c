@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/04 19:41:24 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/06 19:05:02 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ int	my_exit(t_env *env, struct s_parser *parser)
 
 	
 	printf("exit\n");
-	// (void)env;
-	exit_code = 0;
 	check_exit_code(parser);
+	printf("%d %d %d %d %d\n", g_signum, g_signum, g_signum, g_signum, g_signum);
 	if (parser->cmd[1] && !parser->cmd[2])
 	{
-		exit_code = ft_atoi(parser->cmd[1]) % 256;
-		if (exit_code < 0)
-			exit_code = 256 + exit_code;
+		printf("minishell:qwdqwdqwd exit: too many arguments\n");
+		g_signum = ft_atoi(parser->cmd[1]) % 256;
+		if (g_signum < 0)
+			g_signum = 256 + g_signum;
 	}
 	else if (parser->cmd[1] && parser->cmd[2])
 	{

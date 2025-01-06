@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:30:01 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/06 17:58:18 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:22:53 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,36 @@ int	handle_single_quotes(int i, char *input, char **word)
 				"unclosed single quote\n"), free(*word), -1);
 }
 
-int	is_special_char(char c)
+// int	is_special_char(char c)
+// {
+// 	return (c == '|' || c == '<' || c == '>');
+// }
+
+int	handle_backslash(int i, char *input, char **word)
 {
-	return (c == '|' || c == '<' || c == '>');
+	char	*temp;
+	int		start;
+	
+	start = i + 1;
+	if (input[i] && input[i] == '\\')
+	{
+		i++;
+		if (input[i] && !isspace(input[i]) && input[i] != '"'
+			&& input[i] != '\'' && input[i] != '|' && input[i] != '<'
+			&& input[i] != '>')
+		{
+			temp = ft_strndup(input + start, i - start);
+			*word = concat(*word, temp);
+			free(temp);
+		}
+		else
+		{
+			temp = ft_strndup(input + start + 2, i - start);
+			*word = concat(*word, temp);
+			free(temp);
+		}
+	}
+	return (i);
 }
 
 int	handle_regular_text(int i, char *input, t_env *env, char **word)
@@ -71,8 +98,9 @@ int	handle_regular_text(int i, char *input, t_env *env, char **word)
 	char	*expanded_text;
 
 	start = i;
-	while (input[i] && !isspace(input[i]) && !is_special_char(input[i])
-		&& input[i] != '"' && input[i] != '\'')
+	while (input[i] && !isspace(input[i]) && input[i] != '"'
+		&& input[i] != '\'' && input[i] != '|' && input[i] != '<'
+		&& input[i] != '>')
 		i++;
 	temp = ft_strndup(input + start, i - start);
 	if (!temp)
@@ -89,12 +117,15 @@ int	handle_word(int i, char *input, t_lexer **tokens, t_env *env)
 	char	*word;
 
 	word = NULL;
-	while (input[i] && !isspace(input[i]) && !is_special_char(input[i]))
+	while (input[i] && !isspace(input[i]) && input[i] != '|'
+		&& input[i] != '<' && input[i] != '>')
 	{
 		if (input[i] == '"')
 			i = handle_double_quotes(i, input, env, &word);
 		else if (input[i] == '\'')
 			i = handle_single_quotes(i, input, &word);
+		else if (input[i] == '\\')
+			i = handle_backslash(i, input, &word);
 		else
 			i = handle_regular_text(i, input, env, &word);
 		if (i == -1)

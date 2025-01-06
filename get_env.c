@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 14:13:11 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/26 15:37:52 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/06 18:13:21 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_env	*create_env_node(char *name, char *value, int index)
 		return (NULL);
 	node->index = index;
 	node->name = ft_strdup(name);
-	// printf("fdp:   %s\n", node->name);
 	node->value = ft_strdup(value);
 	node->next = NULL;
 	return (node);
@@ -72,7 +71,6 @@ t_env	*get_env(char **initial_env)
 		value = NULL;
 		split_env_var(initial_env[i], &name, &value);
 		new_node = create_env_node(name, value, i);
-		// printf("name = %s\n", name);
 		if (!new_node)
 		{
 			free(name);

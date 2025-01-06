@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2025/01/04 17:40:45 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/06 19:04:25 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				unlink(redirection->value);
 			if (old_fd == -1)
 			{
-				printf("minishell: ");
+				perror("minishell: ");
 				fflush(stdout);
-				perror(cmds->redirections->value);
+				perror(redirection->value);
 				return (-1);
 			}
 			if (dup2(old_fd, exe->fd[0]) == -1)
@@ -164,9 +164,9 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			}
 			if (cmds && cmds->next) // not the last cmd;
 			{
-					close(exe->pipefd[1]);
-					close(prev_pipefd);
-					prev_pipefd = exe->pipefd[0];
+				close(exe->pipefd[1]);
+				close(prev_pipefd);
+				prev_pipefd = exe->pipefd[0];
 			}
 			exe->nmb_cmd -= 1;
 			cmds = cmds->next;
