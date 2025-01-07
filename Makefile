@@ -6,7 +6,7 @@
 #    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 15:18:00 by tbartocc          #+#    #+#              #
-#    Updated: 2025/01/04 18:39:31 by peli             ###   ########.fr        #
+#    Updated: 2025/01/07 17:52:21 by peli             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,10 +24,13 @@ SRC_COMMON =	builtins/cd.c \
 		builtins/export.c \
 		builtins/pwd.c \
 		builtins/unset.c \
-		executor/executor.c \
+		executor/execve.c \
 		executor/redirection.c \
-		executor/exc_utile.c\
+		executor/executor.c \
+		executor/exec_utile.c\
 		executor/init_exc.c\
+		executor/trans_env.c\
+		executor/solo_redir.c\
 		lexer/env_expansion.c \
 		lexer/heredoc_case.c \
 		lexer/lexer.c \

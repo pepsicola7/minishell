@@ -12,135 +12,99 @@
 
 #include "../src.h"
 
-char	*ft_strcpy_(char *dest, const char *src)
+int	pipeline(t_exe *exe, t_parser *cmds)
 {
 	int	i;
+	int prev_pipefd = -1;
 
-	i = 0;
-	if (!dest || !src)
-		return (NULL);
-	while (src[i] != '\0')
+	i = exe->index_pid;
+	while (cmds && (cmds->cmd || cmds->redirections))
 	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-char	**trans_env(t_env	*env_lst)
-{
-	char **res;
-	t_env *tmp;
-	int count;
-	int i;
-
-	count = 0;
-	i = 0;
-	tmp = env_lst;
-	while (tmp)
-	{
-		count++;
-		tmp = tmp->next;
-	}
-	res = ft_calloc( (count + 1), sizeof(char *));
-	if (!res)
-		return (NULL);
-	while (i < count)
-	{
-		if (!env_lst || !env_lst->name || !env_lst->value)
+		while (cmds && cmds->redirections && !cmds->cmd)
 		{
-			free (res);
-			fprintf(stderr, "env_lst ou ses champs sont invalides\n");
-			return (NULL);
-		}
-		if (ft_strcmp(env_lst->name, "?") != 0)
-		{
-			res[i] = ft_calloc(sizeof(char), sizeof(char)
-				* (ft_strlen(env_lst->name) + ft_strlen(env_lst->value) + 2));
-			if (!res[i])
+			if (handle_redir_solo(exe, cmds) == -1)
+				perror("Erreur d'exécution de la redirection");
+			if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
 			{
-				perror("Erreur d'allocation mémoire");
-				while (--i >= 0)
-					free(res[i]);
-				free(res);
-				return (NULL);
+				if (prev_pipefd != STDIN_FILENO)
+					close(prev_pipefd);
 			}
-			ft_strcat(res[i], env_lst->name);
-			ft_strcat(res[i], "=");
-			ft_strcat(res[i], env_lst->value);
+			cmds = cmds->next;
+			exe->nmb_cmd -= 1;
 		}
-		env_lst = env_lst->next;
-		i++;
+		if (cmds && cmds->cmd)
+		{
+			if (cmds->next)
+			{
+				if (pipe(exe->pipefd) == -1)
+					perror("Erreur lors de la création du pipe");
+			}
+			exe->pid[i] = fork(); // sauvgarder le pid pour waitpit() a la fin;
+			if (exe->pid[i] == -1)
+			{
+				free(exe->pid);
+				perror("Erreur du fork");
+				return (-1);
+			}
+			if (exe->pid[i] == 0) // processus enfant
+			{
+				exc_solo_cmd(exe, cmds);
+				if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
+				{
+					if (prev_pipefd != STDIN_FILENO)
+					{
+						if (dup2(prev_pipefd, STDIN_FILENO) == -1)
+							perror("Erreur dup2");
+						close(prev_pipefd);
+					}
+				}
+				if (handle_redir(exe, cmds) == -1)
+					perror("Erreur d'exécution de la redirection");
+				// printf("le pipefd[0] : %d le pipefd[1] = %d\n", exe->pipefd[0], exe->pipefd[1]);
+				pipex(exe);
+				exec_commande(exe, cmds);
+				perror("Erreur d'exécution de la commande");
+				exit(1);
+			}
+			if (cmds && cmds->next) // not the last cmd;
+			{
+					close(exe->pipefd[1]);
+					close(prev_pipefd);
+					prev_pipefd = exe->pipefd[0];
+			}
+			exe->nmb_cmd -= 1;
+			cmds = cmds->next;
+			exe->index_pid++;
+		}
 	}
-	// res[i] = "\0";
-	return (res);
-}
+	if (prev_pipefd != -1) // not the first cmd;
+		close(prev_pipefd);
+	
+	// WAIT
+	int	status;
+	int	signal_number;
+	int	exit_code;
 
-char	*get_pathname(t_env *env_lst)
-{
-	while (env_lst)
+	setup_signals(0);
+	int j = 0;
+	while(j < exe->index_pid)
 	{
-		if (ft_strcmp(env_lst->name, "PATH") == 0)
-			return (env_lst->value);
-		env_lst = env_lst->next;
+		while (waitpid(exe->pid[j], &status, 0) < 0)
+			;
+		j++;
 	}
-	return (NULL); //retourne NULL ou -1?
-}
-
-t_exe	*init_exe(t_env *env, t_parser *cmds)
-{
-	t_exe	*exe;
-	t_parser	*cmd_temps;
-	int		count;
-
-	if (!cmds)
+	exit_code = 0;
+	if (WIFEXITED(status))
+		exit_code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
 	{
-		perror("la liste de commandes est vide");
-		return (NULL);
+		signal_number = WTERMSIG(status);
+		exit_code = 128 + signal_number;
+		if (signal_number == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)", STDERR_FILENO);
+		ft_putstr_fd("\n", STDERR_FILENO);
 	}
-	exe = ft_calloc(1, sizeof(t_exe));
-	if (!exe)
-	{
-		perror("Erreur d'allocation memoire pour exe");
-		return (NULL);
-	}
-	cmd_temps = cmds;
-	count = 0;
-	while (cmd_temps)// 	while (cmd_temps && cmd_temps->cmd) je le change pour fixer : < test | echo hello
-	{
-		count++;
-		cmd_temps = cmd_temps->next;
-	}
-	exe->nmb_cmd = count;
-	exe->pid = ft_calloc(count + 1, sizeof(pid_t));
-	if (!exe->pid)
-	{
-		free(exe);
-		perror("Erreur d'allocation mémoire pour exe->pid");
-		return (NULL);
-	}
-	exe->env =  trans_env(env);
-	if (!exe->env)
-	{
-		free(exe);
-		perror("Erreur lors de la conversion de l'environnement");
-		return (NULL);
-	}
-	exe->pathname = get_pathname(env);//need to ft_calloc;
-	if (!exe->pathname)
-	{
-		free(exe->env);
-		free(exe);
-		perror("Erreur lors de la récupération des chemins");
-		return (NULL);
-	}
-	exe->fd[0] = STDIN_FILENO; // Input;
-	exe->fd[1] = STDOUT_FILENO; // Output;
-	exe->pipefd[0] = -1;
-	exe->pipefd[1] = -1;
-	exe->index_pid = 0;
-	return(exe);
+	return (exit_code);
 }
 
 int	executor(t_env *env, t_parser *cmds)
@@ -148,18 +112,19 @@ int	executor(t_env *env, t_parser *cmds)
 	t_exe	*exe;
 
 	exe = NULL;
-	// print_parser(cmds);
+	print_parser(cmds);
 	// print_env(env);
 	// if this is a bulltin solo; (&& cmds->next == NULL && cmds->prev == NULL)
-	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL)
-	{
-		if (cmds->builtin(env, cmds) == -1)
-		{
-			printf ("Erreur lors de l'exécution du builtin\n");
-			return (-1);
-		}
-		return (0);
-	}
+	// if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL)
+	// {
+	// 	printf("ishould be there");
+	// 	if (cmds->builtin(env, cmds) == -1)
+	// 	{
+	// 		printf ("Erreur lors de l'exécution du builtin\n");
+	// 		return (-1);
+	// 	}
+	// 	return (0);
+	// }
 	exe = init_exe(env, cmds);
 	g_signum = pipeline(exe, cmds);
 	free_exe(exe);

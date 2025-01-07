@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2025/01/04 17:40:45 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/07 18:01:15 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,99 +107,4 @@ void	pipex(t_exe *exe)
 	return ;
 }
 
-
-int	pipeline(t_exe *exe, t_parser *cmds)
-{
-	int	i;
-	int prev_pipefd = -1;
-
-	i = exe->index_pid;
-	while (cmds && (cmds->cmd || cmds->redirections))
-	{
-		while (cmds && cmds->redirections && !cmds->cmd)
-		{
-			if (handle_redir_solo(exe, cmds) == -1)
-				perror("Erreur d'exécution de la redirection");
-			if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
-			{
-				if (prev_pipefd != STDIN_FILENO)
-					close(prev_pipefd);
-			}
-			cmds = cmds->next;
-			exe->nmb_cmd -= 1;
-		}
-		if (cmds && cmds->cmd)
-		{
-			if (cmds->next)
-			{
-				if (pipe(exe->pipefd) == -1)
-					perror("Erreur lors de la création du pipe");
-			}
-			exe->pid[i] = fork(); // sauvgarder le pid pour waitpit() a la fin;
-			if (exe->pid[i] == -1)
-			{
-				free(exe->pid);
-				perror("Erreur du fork");
-				return (-1);
-			}
-			if (exe->pid[i] == 0) // processus enfant
-			{
-				exc_solo_cmd(exe, cmds);
-				if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
-				{
-					if (prev_pipefd != STDIN_FILENO)
-					{
-						if (dup2(prev_pipefd, STDIN_FILENO) == -1)
-							perror("Erreur dup2");
-						close(prev_pipefd);
-					}
-				}
-				if (handle_redir(exe, cmds) == -1)
-					perror("Erreur d'exécution de la redirection");
-				// printf("le pipefd[0] : %d le pipefd[1] = %d\n", exe->pipefd[0], exe->pipefd[1]);
-				pipex(exe);
-				exec_commande(exe, cmds);
-				perror("Erreur d'exécution de la commande");
-				exit(1);
-			}
-			if (cmds && cmds->next) // not the last cmd;
-			{
-					close(exe->pipefd[1]);
-					close(prev_pipefd);
-					prev_pipefd = exe->pipefd[0];
-			}
-			exe->nmb_cmd -= 1;
-			cmds = cmds->next;
-			exe->index_pid++;
-		}
-	}
-	if (prev_pipefd != -1) // not the first cmd;
-		close(prev_pipefd);
-	
-	// WAIT
-	int	status;
-	int	signal_number;
-	int	exit_code;
-
-	setup_signals(0);
-	int j = 0;
-	while(j < exe->index_pid)
-	{
-		while (waitpid(exe->pid[j], &status, 0) < 0)
-			;
-		j++;
-	}
-	exit_code = 0;
-	if (WIFEXITED(status))
-		exit_code = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		signal_number = WTERMSIG(status);
-		exit_code = 128 + signal_number;
-		if (signal_number == SIGQUIT)
-			ft_putstr_fd("Quit (core dumped)", STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
-	}
-	return (exit_code);
-}
 

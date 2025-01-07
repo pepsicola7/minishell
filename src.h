@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/04 18:38:52 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/07 17:58:04 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,13 +137,16 @@ char		*get_user_input(const char *prompt);
 // Executor
 int			executor(t_env *env, t_parser *cmds);
 t_exe		*init_exe(t_env *env, t_parser *cmds);
+t_exe		*init_exe_second(t_env *env, t_exe *exe);
 char		*get_pathname(t_env *env_lst);
+char		*find_path(char *pathname, char *cmd);
 char		**trans_env(t_env	*env_lst);
 int			pipeline(t_exe *exe, t_parser *cmds);
 int			exec_commande(t_exe *exe, t_parser *cmds);
 int			handle_redir(t_exe *exe, t_parser *cmds);
-// int			redir_heredoc(t_exe *exe, t_lexer *redirection);
 void		exc_solo_cmd(t_exe *exe, t_parser *cmds);
 int			handle_redir_solo(t_exe *exe, t_parser *cmds);
-// int			redir_heredoc_solo(t_exe *exe, t_lexer *redirection);
+int			open_input_redirection(t_lexer *redirection);
+int			open_output_redirection(t_lexer *redirection);
+char		*join_path_and_cmd(const char *dir, const char *cmd);
 #endif
