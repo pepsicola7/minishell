@@ -1,0 +1,27 @@
+echo a | ls | cat < infile
+
+PARENT
+- creer 2 pipes
+- fork dans une boucle (i++)
+
+	CHILD
+	- il obtient l'index et le nombre de commandes
+	- il ferme les pipes qui ne le concernent pas
+		si 1er : il garde que pipe[0][1]
+		si milieu : il garde que pipe[i - 1][0] et pipe[i][1]
+		si dernier : il garde que pipe[i - 1][0]
+	- redirections
+		- est-ce qu'il y a un fichier infile (heredoc inclus), prends le dernier
+		- est-ce qu'il y a un fichier outfile, prends le dernier
+		- si on a un fichier infile, on ferme le pipe de lecture s'il existe
+		- si on a un fichier outfile, on ferme le pipe d'ecriture s'il existe
+		- avec dup2 on peut rediriger la lecture sur fd 0 et l'ecriture sur fd 1
+		- bien sur on ferme les fichiers et les pipes car on a deja rediriger
+	- commande
+		- si pas de commande, tu peux arreter l'enfant la
+		- sinon, avec access, est-ce que la commande peut etre executee
+		- sinon, cherche sur le path
+		- execve
+
+- en dehors de la boucle de fork, le parent ferme tous les pipes
+- waitpid
