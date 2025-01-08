@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   src.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 16:41:54 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 17:32:43 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,5 +150,6 @@ void		exc_solo_cmd(t_exe *exe, t_parser *cmds);
 int			handle_redir_solo(t_exe *exe, t_parser *cmds);
 int			open_input_redirection(t_lexer *redirection);
 int			open_output_redirection(t_lexer *redirection);
+void		pipex(t_exe *exe);
 char		*join_path_and_cmd(const char *dir, const char *cmd);
 #endif

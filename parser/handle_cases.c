@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cases.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:41:31 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/02 14:22:34 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 16:02:50 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	handle_pipe_p(t_parser **parser, t_parser **cmd, t_lexer *tokens)
 {
 	if (tokens->next == NULL || tokens->next->type == PIPE)
 	{
-		printf("minishell: syntax error near unexpected token `|'\n");
+		ft_printf(2, "minishell: syntax error near unexpected token `|'\n");
 		free_cmds(*parser);
 		return (0);
 	}

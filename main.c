@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 17:25:54 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 17:32:48 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	main(int ac, char **av, char **initial_env)
 	setup_signals(0);
 	(void)av;
 	if (ac > 1)
-		return (printf("No args needed\n"), 0);
+		return (ft_fprintf(2, "No args needed\n"), 0);
 	env = get_env(initial_env);
 	add_node(env, ft_new_node("?", "0"), 1);
 	while (g_signum != EOF)

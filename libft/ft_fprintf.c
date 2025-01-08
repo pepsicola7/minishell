@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 20:25:36 by peli              #+#    #+#             */
-/*   Updated: 2025/01/04 20:05:50 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/07 18:05:02 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	ft_format(int fd, char c, va_list args)
 	return (count);
 }
 
-int	ft_printf(int fd, const char *format, ...)
+int	ft_fprintf(int fd, const char *format, ...)
 {
 	va_list			args;
 	unsigned int	count;

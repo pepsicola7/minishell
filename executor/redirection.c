@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2025/01/08 17:22:41 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 17:33:12 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				unlink(redirection->value);
 			if (old_fd == -1)
 			{
-				perror("Erreur d'ouverture du fichier d'entree");
+				ft_fprintf(2, "minishell: ");
+				fflush(stdout);
+				perror(cmds->redirections->value);
 				return (-1);
 			}
 			if (dup2(old_fd, exe->fd[0]) == -1)

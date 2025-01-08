@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/20 17:56:07 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:56:55 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	get_target_dir(t_env *env, t_parser *parser, char **dir)
 		if (!*dir)
 		{
 			add_node(env, ft_new_node("?", "1"), 1);
-			printf("minishell: cd: HOME not set\n");
+			ft_fprintf(2, "minishell: cd: HOME not set\n");
 		}
 		else if (parser->cmd[1] && parser->cmd[1][1])
 			*dir = ft_strjoin(*dir, parser->cmd[1] + 1);
@@ -31,7 +31,7 @@ static void	get_target_dir(t_env *env, t_parser *parser, char **dir)
 		if (!*dir)
 		{
 			add_node(env, ft_new_node("?", "1"), 1);
-			printf("minishell: cd: OLDPWD not set\n");
+			ft_fprintf(2, "minishell: cd: OLDPWD not set\n");
 		}
 		else
 			printf("%s\n", *dir);
@@ -44,7 +44,7 @@ static int	check_cd_error(t_env *env, t_parser *parser)
 {
 	if (parser->cmd[1] && parser->cmd[2])
 	{
-		printf("minishell: cd: too many arguments\n");
+		ft_fprintf(2, "minishell: cd: too many arguments\n");
 		add_node(env, ft_new_node("?", "1"), 1);
 		return (1);
 	}
@@ -63,7 +63,7 @@ int	my_cd(t_env *env, t_parser *parser)
 		return (1);
 	if (chdir(temp) != 0)
 	{
-		printf("minishell: cd: %s: %s\n", temp, strerror(errno));
+		ft_fprintf(2, "minishell: cd: %s: %s\n", temp, strerror(errno));
 		add_node(env, ft_new_node("?", "1"), 1);
 		return (1);
 	}

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
+#    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 14:34:27 by tbartocc          #+#    #+#              #
-#    Updated: 2025/01/04 19:54:02 by peli             ###   ########.fr        #
+#    Updated: 2025/01/08 15:44:29 by tbartocc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SRC =	ft_atoi.c \
 	ft_atol.c \
 	ft_bzero.c \
 	ft_calloc.c \
+	ft_fprintf.c \
 	ft_free_tab.c \
 	ft_isalnum.c \
 	ft_isalpha.c \
@@ -72,7 +73,6 @@ SRC =	ft_atoi.c \
 	ft_tablen.c \
 	ft_tolower.c \
 	ft_toupper.c \
-	ft_printf.c \
 	ft_fonction.c \
 	get_next_line_OLD.c
 

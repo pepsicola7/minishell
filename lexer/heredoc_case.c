@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_case.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:26:13 by peli              #+#    #+#             */
-/*   Updated: 2025/01/08 17:18:50 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 17:33:22 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ static void	write_to_heredoc(int fd, char *delimiter)
 	free(line);
 	if (g_signum == EOF)
 	{
-		ft_putstr_fd("minishell: warning: here-document ", STDERR_FILENO);
-		ft_putstr_fd("delimited by end-of-file (wanted `", STDERR_FILENO);
-		ft_putstr_fd(delimiter, STDERR_FILENO);
-		ft_putstr_fd("')\n", STDERR_FILENO);
+		ft_putstr_fd("minishell: warning: here-document ", 2);
+		ft_putstr_fd("delimited by end-of-file (wanted `", 2);
+		ft_putstr_fd(delimiter, 2);
+		ft_putstr_fd("')\n", 2);
 	}
 }

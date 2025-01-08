@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/07 16:11:22 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 15:59:07 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ static void	check_exit_code(struct s_parser *parser)
 		if (i == 0 && !ft_isdigit(parser->cmd[1][i])
 			&& parser->cmd[1][i] != '-' && parser->cmd[1][i] != '+')
 		{
-			printf("minishell: exit: %s: numeric argument required\n"
+			ft_fprintf(2, "minishell: exit: %s: numeric argument required\n"
 				, parser->cmd[1]);
 			exit(2);
 		}
 		else if (i != 0 && !ft_isdigit(parser->cmd[1][i]))
 		{
-			printf("minishell: exit: %s: numeric argument required\n"
+			ft_fprintf(2, "minishell: exit: %s: numeric argument required\n"
 				, parser->cmd[1]);
 			exit(2);
 		}
@@ -53,7 +53,7 @@ int	my_exit(t_env *env, struct s_parser *parser)
 	}
 	else if (parser->cmd[1] && parser->cmd[2])
 	{
-		printf("minishell: exit: too many arguments\n");
+		ft_printf(2, "minishell: exit: too many arguments\n");
 		return (1);
 	}
 	else

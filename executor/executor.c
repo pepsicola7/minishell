@@ -100,8 +100,8 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 		signal_number = WTERMSIG(status);
 		exit_code = 128 + signal_number;
 		if (signal_number == SIGQUIT)
-			ft_putstr_fd("Quit (core dumped)", STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
+			ft_putstr_fd("Quit (core dumped)", 2);
+		ft_putstr_fd("\n", 2);
 	}
 	return (exit_code);
 }

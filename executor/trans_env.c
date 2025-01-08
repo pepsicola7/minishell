@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trans_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 16:25:34 by peli              #+#    #+#             */
-/*   Updated: 2025/01/08 17:18:32 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 17:33:17 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ char **trans_env(t_env *env_lst)
 // 		if (!env_lst || !env_lst->name || !env_lst->value)
 // 		{
 // 			free (res);
-// 			fprintf(stderr, "env_lst ou ses champs sont invalides\n");
+// 			ft_fprintf(2, "env_lst ou ses champs sont invalides\n");
 // 			return (NULL);
 // 		}
 // 		if (ft_strcmp(env_lst->name, "?") != 0)

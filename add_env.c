@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:48:19 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/20 15:48:54 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:55:42 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	add_node(t_env *env, t_env *nw, int ret)
 		if ((i == 0 && ft_isdigit(nw->name[i])) || (!ft_isalnum(nw->name[i])
 				&& nw->name[i] != '_'))
 		{
-			printf("minishell: export: `%s=%s': not a valid identifier\n",
+			ft_fprintf(2, "minishell: export: `%s=%s': not a valid identifier\n",
 				nw->name, nw->value);
 			free(nw);
 			return (1);
