@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 17:32:48 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:16:00 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_signum;
 
-void	update_exit_code_in_env(t_env *env, int exit_code)
+void	update_exit_code_in_env(t_env **env, int exit_code)
 {
 	char	*str_num;
 
@@ -103,7 +103,7 @@ int	main(int ac, char **av, char **initial_env)
 	if (ac > 1)
 		return (ft_fprintf(2, "No args needed\n"), 0);
 	env = get_env(initial_env);
-	add_node(env, ft_new_node("?", "0"), 1);
+	add_node(&env, ft_new_node("?", "0"), 1);
 	while (g_signum != EOF)
 	{
 		input = get_user_input("minishell> ");
@@ -129,10 +129,10 @@ int	main(int ac, char **av, char **initial_env)
 			else
 			{
 				int prev_exit_code = exit_code;
-				exit_code = executor(env, cmds);
+				exit_code = executor(&env, cmds);
 				if (exit_code == 136)
 					exit_code = prev_exit_code;
-				update_exit_code_in_env(env, exit_code);
+				update_exit_code_in_env(&env, exit_code);
 			}
 			free_cmds(cmds);
 			free_tokens(tokens);

@@ -6,13 +6,13 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/04 14:29:28 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:00:23 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
 
-int	my_pwd(t_env *env, t_parser *parser)
+int	my_pwd(t_env **env, t_parser *parser)
 {
 	char	cwd[1024];
 

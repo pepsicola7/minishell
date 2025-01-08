@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 17:36:44 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:59:57 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	check_exit_code(struct s_parser *parser)
 	}
 }
 
-int	my_exit(t_env *env, struct s_parser *parser)
+int	my_exit(t_env **env, struct s_parser *parser)
 {
 	int		exit_code;
 	char	*str;

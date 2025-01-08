@@ -6,13 +6,13 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/12/20 15:48:26 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:00:15 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
 
-int	my_export(t_env *env, t_parser *parser)
+int	my_export(t_env **env, t_parser *parser)
 {
 	int		i;
 	int		len_equal;
@@ -20,7 +20,7 @@ int	my_export(t_env *env, t_parser *parser)
 	char	*value;
 
 	if (!parser->cmd || !parser->cmd[1])
-		return (print_export(env), add_node(env, ft_new_node("?", "0"), 1), 1);
+		return (print_export(*env), add_node(env, ft_new_node("?", "0"), 1), 1);
 	i = -1;
 	len_equal = ft_strlen_c(parser->cmd[1], '=');
 	name = ft_strndup(parser->cmd[1], len_equal);
@@ -41,7 +41,7 @@ char	*get_value(char *name, t_env *env)
 		return (NULL);
 	while (tmp)
 	{
-		if (ft_strcmp(tmp->name, name) != 0)
+		if (ft_strcmp(tmp->name, name) == 0)
 			return (tmp->value);
 		tmp = tmp->next;
 	}

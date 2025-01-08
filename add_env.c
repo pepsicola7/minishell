@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:48:19 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 15:55:42 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:15:02 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,12 @@ static t_env	*last_node(t_env *lst)
 	return (lst);
 }
 
-int	env_edit(t_env *lst, t_env *newnode)
+int	env_edit(t_env **lst, t_env *newnode)
 {
 	t_env	*tmp;
 
-	newnode->index = max_index(lst) + 1;
-	tmp = lst;
+	newnode->index = max_index(*lst) + 1;
+	tmp = *lst;
 	while (tmp)
 	{
 		if (newnode && tmp->name && newnode->name && ft_strcmp(tmp->name,
@@ -70,7 +70,7 @@ int	env_edit(t_env *lst, t_env *newnode)
 	return (0);
 }
 
-int	add_node(t_env *env, t_env *nw, int ret)
+int	add_node(t_env **env, t_env *nw, int ret)
 {
 	int		i;
 	t_env	*last;
@@ -90,11 +90,11 @@ int	add_node(t_env *env, t_env *nw, int ret)
 	i = env_edit(env, nw);
 	if (nw && !i && env)
 	{
-		last = last_node(env);
+		last = last_node(*env);
 		last->next = nw;
 	}
 	else if (nw && !i)
-		env = nw;
+		*env = nw;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/02 15:27:45 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 18:56:27 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	pass_args(t_parser *parser, int *i)
 	return (0);
 }
 
-int	my_echo(t_env *env, t_parser *parser)
+int	my_echo(t_env **env, t_parser *parser)
 {
 	int	i;
 	int	n;

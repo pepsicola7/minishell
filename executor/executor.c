@@ -106,7 +106,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 	return (exit_code);
 }
 
-int	executor(t_env *env, t_parser *cmds)
+int	executor(t_env **env, t_parser *cmds)
 {
 	t_exe	*exe;
 	int		exit_code;
@@ -124,7 +124,7 @@ int	executor(t_env *env, t_parser *cmds)
 		}
 		return (0);
 	}
-	exe = init_exe(env, cmds);
+	exe = init_exe(*env, cmds);
 	exit_code = pipeline(exe, cmds);
 	free_exe(exe);
 	return (exit_code);

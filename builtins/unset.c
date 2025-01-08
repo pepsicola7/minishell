@@ -6,34 +6,52 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 17:36:49 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:14:18 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
 
-int	my_unset(t_env *env, t_parser *parser)
+static int	remove_elem(t_env **env, t_env **last, t_env **tmp)
 {
-	t_env	*prev;
-	t_env	*current;
+	if (*last == NULL)
+		*env = (*tmp)->next;
+	else
+		(*last)->next = (*tmp)->next;
+	free((*tmp)->name);
+	free((*tmp)->value);
+	free(*tmp);
+	*tmp = *env;
+	if (*last == NULL)
+		return (1);
+	return (0);
+}
 
-	if (!parser->cmd[1])
-		return (ft_fprintf(2, "unset: missing argument\n"), 1);
-	current = env;
-	prev = NULL;
-	while (current)
+int	my_unset(t_env **env, t_parser *parser)
+{
+	t_env	*last;
+	t_env	*tmp;
+	int		i;
+
+	tmp = *env;
+	last = NULL;
+	i = 1;
+	while (tmp && parser->cmd[i])
 	{
-		if (ft_strcmp(current->name, parser->cmd[1]) == 0)
+		if (ft_strcmp(parser->cmd[i], tmp->name) == 0 && ft_strcmp(parser->cmd[i],
+				"?") != 0)
 		{
-			if (prev)
-				prev->next = current->next;
-			free(current->name);
-			free(current->value);
-			free(current);
-			return (0);
+			if (remove_elem(env, &last, &tmp))
+				continue ;
+			if (parser->cmd[i++ + 1] == NULL)
+			{
+				add_node(env, ft_new_node("?", "0"), 1);
+				return (0);
+			}
 		}
-		prev = current;
-		current = current->next;
+		last = tmp;
+		tmp = tmp->next;
 	}
+	add_node(env, ft_new_node("?", "0"), 1);
 	return (0);
 }

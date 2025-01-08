@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 17:32:43 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:55:04 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_lexer
 typedef struct s_parser
 {
 	char			**cmd; // execve recoit un **;
-	int				(*builtin)(t_env *, struct s_parser *);
+	int				(*builtin)(t_env **, struct s_parser *);
 	int				num_redirections;
 	t_lexer			*redirections;
 	struct s_parser	*next;
@@ -81,13 +81,13 @@ typedef struct s_exe
 }	t_exe;
 
 // Builtins
-int			my_cd(t_env *env, struct s_parser *parser);
-int			my_echo(t_env *env, struct s_parser *parser);
-int			my_env(t_env *env, struct s_parser *parser);
-int			my_exit(t_env *env, struct s_parser *parser);
-int			my_export(t_env *env, struct s_parser *parser);
-int			my_pwd(t_env *env, struct s_parser *parser);
-int			my_unset(t_env *env, struct s_parser *parser);
+int			my_cd(t_env **env, struct s_parser *parser);
+int			my_echo(t_env **env, struct s_parser *parser);
+int			my_env(t_env **env, struct s_parser *parser);
+int			my_exit(t_env **env, struct s_parser *parser);
+int			my_export(t_env **env, struct s_parser *parser);
+int			my_pwd(t_env **env, struct s_parser *parser);
+int			my_unset(t_env **env, struct s_parser *parser);
 
 // Lexer
 void		add_token(t_lexer **head, t_lexer *new_token);
@@ -109,7 +109,7 @@ void		add_argument_to_cmd(t_parser *cmd, char *arg);
 void		add_cmd(t_parser **head, t_parser *new_cmd);
 void		add_redirection(t_parser *cmd, int redir_type, char *redir_value);
 t_parser	*create_cmd(void);
-int			(*get_builtin_function(char *cmd))(t_env *, t_parser *);
+int			(*get_builtin_function(char *cmd))(t_env **, t_parser *);
 void		handle_command(t_parser **current_cmd, t_lexer *tokens);
 t_lexer		*handle_redirection(t_parser **current_cmd, t_lexer *tokens);
 int			handle_pipe_p(t_parser **parser, t_parser **cmd, t_lexer *tokens);
@@ -117,7 +117,7 @@ int			is_builtin(char *cmd);
 t_parser	*parse_lexer(t_lexer *tokens);
 
 // Main
-int			add_node(t_env *env, t_env *nw, int ret);
+int			add_node(t_env **env, t_env *nw, int ret);
 void		free_cmds(t_parser *cmds);
 void		free_env(t_env *env);
 void		free_tokens(t_lexer *tokens);
@@ -136,7 +136,7 @@ void		signal_handler(int signum);
 char		*get_user_input(const char *prompt);
 
 // Executor
-int			executor(t_env *env, t_parser *cmds);
+int			executor(t_env **env, t_parser *cmds);
 t_exe		*init_exe(t_env *env, t_parser *cmds);
 t_exe		*init_exe_second(t_env *env, t_exe *exe);
 void		pipex(t_exe *exe);
