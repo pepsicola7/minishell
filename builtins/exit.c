@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 15:59:07 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:36:44 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	my_exit(t_env *env, struct s_parser *parser)
 	}
 	else if (parser->cmd[1] && parser->cmd[2])
 	{
-		ft_printf(2, "minishell: exit: too many arguments\n");
+		ft_fprintf(2, "minishell: exit: too many arguments\n");
 		return (1);
 	}
 	else

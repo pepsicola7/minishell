@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 16:00:17 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:36:49 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	my_unset(t_env *env, t_parser *parser)
 	t_env	*current;
 
 	if (!parser->cmd[1])
-		return (ft_printf(2, "unset: missing argument\n"), 1);
+		return (ft_fprintf(2, "unset: missing argument\n"), 1);
 	current = env;
 	prev = NULL;
 	while (current)

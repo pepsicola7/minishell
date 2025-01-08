@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:30:01 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 17:33:27 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:36:51 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	handle_double_quotes(int i, char *input, t_env *env, char **word)
 		return (i + 1);
 	}
 	else
-		return (ft_printf(2, "minishell: syntax error: "
+		return (ft_fprintf(2, "minishell: syntax error: "
 				"unclosed double quote\n"), free(*word), -1);
 }
 
@@ -55,7 +55,7 @@ int	handle_single_quotes(int i, char *input, char **word)
 		return (i + 1);
 	}
 	else
-		return (ft_printf(2, "minishell: syntax error: "
+		return (ft_fprintf(2, "minishell: syntax error: "
 				"unclosed single quote\n"), free(*word), -1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 15:49:52 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:37:00 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int		ft_tablen(char **tab);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
 char	*get_next_line(int fd);
-int		ft_printf(int fd, const char *format, ...);
+int		ft_fprintf(int fd, const char *format, ...);
 int		ft_putchar_(int fd, char c);
 int		ft_putnbr_(int fd, int i);
 int		ft_putnbr_u(int fd, unsigned int i);
