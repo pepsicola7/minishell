@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/07 17:58:04 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 16:41:54 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,14 @@ void		print_env(t_env *env);
 void		print_export(t_env *env);
 void		print_parser(t_parser *cmds);
 void		setup_signals(int in_child);
+void		signal_handler(int signum);
 char		*get_user_input(const char *prompt);
 
 // Executor
 int			executor(t_env *env, t_parser *cmds);
 t_exe		*init_exe(t_env *env, t_parser *cmds);
 t_exe		*init_exe_second(t_env *env, t_exe *exe);
+void		pipex(t_exe *exe);
 char		*get_pathname(t_env *env_lst);
 char		*find_path(char *pathname, char *cmd);
 char		**trans_env(t_env	*env_lst);

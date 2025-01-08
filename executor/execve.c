@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2025/01/07 17:56:05 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 16:15:56 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	exec_commande(t_exe *exe, t_parser *cmds)
 			// exit(EXIT_FAILURE);
 		}
 	}
+	printf("lalala\n");
 	exit(EXIT_SUCCESS);
 }
 

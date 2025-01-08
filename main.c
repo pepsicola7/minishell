@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/04 19:42:10 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 17:25:54 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	g_signum;
 
-void	update_exit_code_in_env(t_env *env)
+void	update_exit_code_in_env(t_env *env, int exit_code)
 {
 	char	*str_num;
 
-	str_num = ft_itoa(g_signum);
+	str_num = ft_itoa(exit_code);
 	add_node(env, ft_new_node("?", str_num), 1);
 	free(str_num);
 }
@@ -76,7 +76,9 @@ char	*get_user_input(const char *prompt)
 	prev_signum = g_signum;
 	g_signum = 0;
 	stdin_dup = dup(STDIN_FILENO);
+	signal(SIGINT, signal_handler);
 	line = readline(prompt);
+	signal(SIGINT, SIG_IGN);
 	dup2(stdin_dup, STDIN_FILENO);
 	close(stdin_dup);
 	if (!line && !g_signum)
@@ -92,8 +94,10 @@ int	main(int ac, char **av, char **initial_env)
 	t_lexer		*tokens;
 	t_parser	*cmds;
 	t_env		*env;
+	int			exit_code;
 
 	g_signum = 0;
+	exit_code = 0;
 	setup_signals(0);
 	(void)av;
 	if (ac > 1)
@@ -124,8 +128,11 @@ int	main(int ac, char **av, char **initial_env)
 			}
 			else
 			{
-				executor(env, cmds);
-				update_exit_code_in_env(env);
+				int prev_exit_code = exit_code;
+				exit_code = executor(env, cmds);
+				if (exit_code == 136)
+					exit_code = prev_exit_code;
+				update_exit_code_in_env(env, exit_code);
 			}
 			free_cmds(cmds);
 			free_tokens(tokens);
@@ -133,7 +140,7 @@ int	main(int ac, char **av, char **initial_env)
 		}
 	}
 	free_env(env);
-	return (0);
+	return (exit_code);
 }
 /*
 	Add to main :

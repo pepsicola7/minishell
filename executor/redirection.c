@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 16:09:48 by peli              #+#    #+#             */
-/*   Updated: 2025/01/07 18:01:15 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/08 17:22:41 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ int	handle_redir(t_exe *exe, t_parser *cmds)
 				unlink(redirection->value);
 			if (old_fd == -1)
 			{
-				printf("minishell: ");
-				fflush(stdout);
-				perror(cmds->redirections->value);
+				perror("Erreur d'ouverture du fichier d'entree");
 				return (-1);
 			}
 			if (dup2(old_fd, exe->fd[0]) == -1)
@@ -106,5 +104,3 @@ void	pipex(t_exe *exe)
 	}
 	return ;
 }
-
-

@@ -85,7 +85,6 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 	int	signal_number;
 	int	exit_code;
 
-	setup_signals(0);
 	int j = 0;
 	while(j < exe->index_pid)
 	{
@@ -110,23 +109,23 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 int	executor(t_env *env, t_parser *cmds)
 {
 	t_exe	*exe;
+	int		exit_code;
 
 	exe = NULL;
 	print_parser(cmds);
 	// print_env(env);
 	// if this is a bulltin solo; (&& cmds->next == NULL && cmds->prev == NULL)
-	// if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL)
-	// {
-	// 	printf("ishould be there");
-	// 	if (cmds->builtin(env, cmds) == -1)
-	// 	{
-	// 		printf ("Erreur lors de l'exécution du builtin\n");
-	// 		return (-1);
-	// 	}
-	// 	return (0);
-	// }
+	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL && cmds->num_redirections == 0)
+	{
+		if ( cmds->builtin(env, cmds) == -1)
+		{
+			printf ("Erreur lors de l'exécution du builtin\n");
+			return (-1);
+		}
+		return (0);
+	}
 	exe = init_exe(env, cmds);
-	g_signum = pipeline(exe, cmds);
+	exit_code = pipeline(exe, cmds);
 	free_exe(exe);
-	return (g_signum);
+	return (exit_code);
 }
