@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 18:59:40 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/09 19:35:34 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	my_env(t_env **env, t_parser *parser)
 	tmp = *env;
 	while (tmp)
 	{
-		printf("%s=%s\n", tmp->name, tmp->value);
+		if (ft_strcmp(tmp->name, "?") != 0)
+			printf("%s=%s\n", tmp->name, tmp->value);
 		tmp = tmp->next;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 18:55:04 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/09 19:09:46 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,9 @@ t_parser	*create_cmd(void);
 int			(*get_builtin_function(char *cmd))(t_env **, t_parser *);
 void		handle_command(t_parser **current_cmd, t_lexer *tokens);
 t_lexer		*handle_redirection(t_parser **current_cmd, t_lexer *tokens);
-int			handle_pipe_p(t_parser **parser, t_parser **cmd, t_lexer *tokens);
+int			handle_pipe_p(t_parser **parser, t_parser **cmd, t_lexer *tokens, t_env **env);
 int			is_builtin(char *cmd);
-t_parser	*parse_lexer(t_lexer *tokens);
+t_parser	*parse_lexer(t_lexer *tokens, t_env **env);
 
 // Main
 int			add_node(t_env **env, t_env *nw, int ret);
@@ -137,16 +137,16 @@ char		*get_user_input(const char *prompt);
 
 // Executor
 int			executor(t_env **env, t_parser *cmds);
-t_exe		*init_exe(t_env *env, t_parser *cmds);
-t_exe		*init_exe_second(t_env *env, t_exe *exe);
+t_exe		*init_exe(t_env *env, t_parser *cmds, int *exit_code);
+t_exe		*init_exe_second(t_env *env, t_exe *exe, int *exit_code);
 void		pipex(t_exe *exe);
 char		*get_pathname(t_env *env_lst);
 char		*find_path(char *pathname, char *cmd);
 char		**trans_env(t_env	*env_lst);
-int			pipeline(t_exe *exe, t_parser *cmds);
-int			exec_commande(t_exe *exe, t_parser *cmds);
+int			pipeline(t_exe *exe, t_parser *cmds,  t_env **env);
+int			exec_commande(t_exe *exe, t_parser *cmds, t_env **env);
 int			handle_redir(t_exe *exe, t_parser *cmds);
-void		exc_solo_cmd(t_exe *exe, t_parser *cmds);
+void		exc_solo_cmd(t_exe *exe, t_parser *cmds, t_env **env);
 int			handle_redir_solo(t_exe *exe, t_parser *cmds);
 int			open_input_redirection(t_lexer *redirection);
 int			open_output_redirection(t_lexer *redirection);

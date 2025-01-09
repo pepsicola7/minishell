@@ -12,7 +12,7 @@
 
 #include "../src.h"
 
-int	pipeline(t_exe *exe, t_parser *cmds)
+int	pipeline(t_exe *exe, t_parser *cmds, t_env **env)
 {
 	int	i;
 	int prev_pipefd = -1;
@@ -48,7 +48,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 			}
 			if (exe->pid[i] == 0) // processus enfant
 			{
-				exc_solo_cmd(exe, cmds);
+				exc_solo_cmd(exe, cmds, env);
 				if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
 				{
 					if (prev_pipefd != STDIN_FILENO)
@@ -59,10 +59,10 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 					}
 				}
 				if (handle_redir(exe, cmds) == -1)
-					perror("Erreur d'exécution de la redirection");
+					exit (1);
 				// printf("le pipefd[0] : %d le pipefd[1] = %d\n", exe->pipefd[0], exe->pipefd[1]);
 				pipex(exe);
-				exec_commande(exe, cmds);
+				exec_commande(exe, cmds, env);
 				perror("Erreur d'exécution de la commande");
 				exit(1);
 			}
@@ -90,6 +90,7 @@ int	pipeline(t_exe *exe, t_parser *cmds)
 	{
 		while (waitpid(exe->pid[j], &status, 0) < 0)
 			;
+		ft_fprintf(2, "val %d\n", WEXITSTATUS(status));
 		j++;
 	}
 	exit_code = 0;
@@ -111,21 +112,20 @@ int	executor(t_env **env, t_parser *cmds)
 	t_exe	*exe;
 	int		exit_code;
 
+	exit_code = 0;
 	exe = NULL;
-	print_parser(cmds);
 	// print_env(env);
 	// if this is a bulltin solo; (&& cmds->next == NULL && cmds->prev == NULL)
 	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL && cmds->num_redirections == 0)
 	{
-		if ( cmds->builtin(env, cmds) == -1)
-		{
-			printf ("Erreur lors de l'exécution du builtin\n");
-			return (-1);
-		}
+		if ( cmds->builtin(env, cmds) == 1)
+			return (1);
 		return (0);
 	}
-	exe = init_exe(*env, cmds);
-	exit_code = pipeline(exe, cmds);
+	exe = init_exe(*env, cmds, &exit_code);
+	if (!exe)
+		return (exit_code);
+	exit_code = pipeline(exe, cmds, env);
 	free_exe(exe);
 	return (exit_code);
 }

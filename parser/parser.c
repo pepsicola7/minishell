@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:22:06 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 16:13:26 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/09 16:41:48 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	add_argument_to_cmd(t_parser *cmd, char *arg)
 	cmd->cmd = new_args;
 }
 
-t_parser	*parse_lexer(t_lexer *tokens)
+t_parser	*parse_lexer(t_lexer *tokens, t_env **env)
 {
 	t_parser	*parser;
 	t_parser	*current_cmd;
@@ -111,7 +111,7 @@ t_parser	*parse_lexer(t_lexer *tokens)
 			tokens = handle_redirection(&current_cmd, tokens);
 		else if (tokens->type == PIPE)
 		{
-			if (!handle_pipe_p(&parser, &current_cmd, tokens))
+			if (!handle_pipe_p(&parser, &current_cmd, tokens, env))
 				return (NULL);
 			tokens = tokens->next;
 		}

@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:54 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 19:16:00 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:44:59 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,8 @@ int	main(int ac, char **av, char **initial_env)
 			// print_env(env);
 			tokens = lexer(input, &env);
 			// print_lexers(tokens);
-			cmds = parse_lexer(tokens);
+			cmds = parse_lexer(tokens, &env);
+			//print_parser(cmds);
 			// ft_print_tab(initial_env);
 			// print_parser(cmds);
 			if (g_signum == SIGINT)
@@ -126,7 +127,7 @@ int	main(int ac, char **av, char **initial_env)
 					redirection = redirection->next;
 				}
 			}
-			else
+			else if (cmds)
 			{
 				int prev_exit_code = exit_code;
 				exit_code = executor(&env, cmds);

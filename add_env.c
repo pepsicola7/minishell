@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:48:19 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 19:15:02 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:30:08 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	add_node(t_env **env, t_env *nw, int ret)
 		}
 	}
 	i = env_edit(env, nw);
-	if (nw && !i && env)
+	if (nw && !i && *env)
 	{
 		last = last_node(*env);
 		last->next = nw;

@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:30:01 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 17:36:51 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:03:25 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	handle_double_quotes(int i, char *input, t_env *env, char **word)
 	}
 	else
 		return (ft_fprintf(2, "minishell: syntax error: "
-				"unclosed double quote\n"), free(*word), -1);
+				"unclosed double quote\n"), -1);
 }
 
 int	handle_single_quotes(int i, char *input, char **word)
@@ -92,7 +92,9 @@ int	handle_word(int i, char *input, t_lexer **tokens, t_env *env)
 	while (input[i] && !isspace(input[i]) && !is_special_char(input[i]))
 	{
 		if (input[i] == '"')
+		{
 			i = handle_double_quotes(i, input, env, &word);
+		}
 		else if (input[i] == '\'')
 			i = handle_single_quotes(i, input, &word);
 		else
@@ -101,11 +103,7 @@ int	handle_word(int i, char *input, t_lexer **tokens, t_env *env)
 			return (-1);
 	}
 	if (word && ft_strcmp(word, ""))
-	{
 		add_token(tokens, create_token(WORD, word));
-		free(word);
-	}
-	else
-		free(word);
+	free(word);
 	return (i);
 }

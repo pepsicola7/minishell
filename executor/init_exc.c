@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:35:59 by peli              #+#    #+#             */
-/*   Updated: 2025/01/07 16:15:26 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/09 18:23:48 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,14 @@ char	*get_pathname(t_env *env_lst)
 	return (NULL); //retourne NULL ou -1?
 }
 
-t_exe	*init_exe_second(t_env *env, t_exe *exe)
+t_exe	*init_exe_second(t_env *env, t_exe *exe, int *exit_code)
 {
-	if (!exe->pid)
-	{
-		free(exe);
-		perror("Erreur d'allocation mémoire pour exe->pid");
-		return (NULL);
-	}
-	exe->env =  trans_env(env);
+	exe->fd[0] = STDIN_FILENO; // Input;
+	exe->fd[1] = STDOUT_FILENO; // Output;
+	exe->pipefd[0] = -1;
+	exe->pipefd[1] = -1;
+	exe->index_pid = 0;
+	exe->env = trans_env(env);
 	if (!exe->env)
 	{
 		free(exe);
@@ -39,21 +38,19 @@ t_exe	*init_exe_second(t_env *env, t_exe *exe)
 		return (NULL);
 	}
 	exe->pathname = get_pathname(env);//need to ft_calloc;
-	if (!exe->pathname)
-	{
-		free(exe->env);
-		free(exe);
-		perror("Erreur lors de la récupération des chemins");
-		return (NULL);
-	}
-	exe->fd[0] = STDIN_FILENO; // Input;
-	exe->fd[1] = STDOUT_FILENO; // Output;
-	exe->pipefd[0] = -1;
-	exe->pipefd[1] = -1;
-	exe->index_pid = 0;
+	(void)*exit_code;
+	// if (!exe->pathname)
+	// {
+	// 	*exit_code = 1;
+	// 	free(exe->env);
+	// 	free(exe);
+	// 	perror("Erreur lors de la récupération des chemins");
+	// 	return (NULL);
+	// }
 	return (exe);
 }
-t_exe	*init_exe(t_env *env, t_parser *cmds)
+
+t_exe	*init_exe(t_env *env, t_parser *cmds, int *exit_code)
 {
 	t_exe	*exe;
 	t_parser	*cmd_temps;
@@ -78,7 +75,16 @@ t_exe	*init_exe(t_env *env, t_parser *cmds)
 		cmd_temps = cmd_temps->next;
 	}
 	exe->nmb_cmd = count;
-	exe->pid = ft_calloc(count + 1, sizeof(pid_t));
-	exe = init_exe_second(env, exe);
+	exe = init_exe_second(env, exe, exit_code);
+	if (exe)
+	{
+		exe->pid = ft_calloc(count + 1, sizeof(pid_t));
+		if (!exe->pid)
+		{
+			free(exe);
+			perror("Erreur d'allocation mémoire pour exe->pid");
+			return (NULL);
+		}
+	}
 	return(exe);
 }

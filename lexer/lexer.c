@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 18:05:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/06 18:00:14 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:01:33 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_lexer	*lexer(char *input, t_env **env)
 
 	i = 0;
 	tokens = NULL;
-	while (input[i])
+	while (i != -1 && input[i])
 	{
 		if (isspace(input[i]))
 			i++;

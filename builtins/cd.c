@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 19:23:26 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/09 17:37:01 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ static void	get_target_dir(t_env **env, t_parser *parser, char **dir)
 			ft_fprintf(2, "minishell: cd: HOME not set\n");
 		}
 		else if (parser->cmd[1] && parser->cmd[1][1])
-		{
 			*dir = ft_strjoin(*dir, parser->cmd[1] + 1);
-		}
 	}
 	else if (ft_strcmp(parser->cmd[1], "-") == 0)
 	{
@@ -70,7 +68,9 @@ int	my_cd(t_env **env, t_parser *parser)
 		return (1);
 	}
 	add_node(env, ft_new_node("OLDPWD", get_value("PWD", *env)), 0);
-	add_node(env, ft_new_node("PWD", getcwd(NULL, 0)), 0);
+	temp = getcwd(NULL, 0);
+	add_node(env, ft_new_node("PWD", temp), 0);
+	free(temp);
 	add_node(env, ft_new_node("?", "0"), 1);
 	// free(temp);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utile.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 16:34:50 by peli              #+#    #+#             */
-/*   Updated: 2025/01/07 17:56:11 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/09 18:54:43 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ char	*find_path(char *pathname, char *cmd)
 
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
+	if (pathname == NULL)
+		return (NULL);
 	sp_path = ft_split(pathname, ':');
 	if (!sp_path)
 		return (NULL);

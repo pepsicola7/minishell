@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 16:25:34 by peli              #+#    #+#             */
-/*   Updated: 2025/01/08 17:33:17 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:27:51 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,12 @@ char *create_env_entry(t_env *env_node)
 
 	if (!env_node || !env_node->name || !env_node->value)
 		return (NULL);
-
-	entry = ft_calloc(sizeof(char), sizeof(char)
-		* (ft_strlen(env_node->name) + ft_strlen(env_node->value) + 2));
+	entry = ft_calloc(sizeof(char), (ft_strlen(env_node->name) + ft_strlen(env_node->value) + 2));
 	if (!entry)
 		return (NULL);
-
 	ft_strcat(entry, env_node->name);
 	ft_strcat(entry, "=");
 	ft_strcat(entry, env_node->value);
-
 	return (entry);
 }
 

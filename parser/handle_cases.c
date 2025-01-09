@@ -6,7 +6,7 @@
 /*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:41:31 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 17:37:03 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/09 16:42:28 by tbartocc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ t_lexer	*handle_redirection(t_parser **current_cmd, t_lexer *tokens)
 	return (tokens->next);
 }
 
-int	handle_pipe_p(t_parser **parser, t_parser **cmd, t_lexer *tokens)
+int	handle_pipe_p(t_parser **parser, t_parser **cmd, t_lexer *tokens, t_env **env)
 {
 	if (tokens->next == NULL || tokens->next->type == PIPE)
 	{
 		ft_fprintf(2, "minishell: syntax error near unexpected token `|'\n");
+		add_node(env, ft_new_node("?", "1"), 1);
 		free_cmds(*parser);
 		return (0);
 	}
