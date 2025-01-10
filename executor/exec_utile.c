@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utile.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 16:34:50 by peli              #+#    #+#             */
-/*   Updated: 2025/01/09 18:54:43 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:35:41 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,55 @@ char	*join_path_and_cmd(const char *dir, const char *cmd)
 	return (full_path);
 }
 
+char	*check_path(t_exe *exe, t_parser *cmds)
+{
+	struct stat	path_stat;
+	char		*res;
+
+	res = find_path(exe->pathname, cmds->cmd[0]);
+	if (stat(res, &path_stat) == 0 && S_ISDIR(path_stat.st_mode))
+	{
+		if (ft_strchr(cmds->cmd[0], '/') == NULL)
+		{
+			ft_fprintf(2, "%s: command not found\n", cmds->cmd[0]);
+			exit(127);
+		}
+		ft_fprintf(2, "minishell: Is a directory\n");
+		exit(126);
+	}
+	return (res);
+}
+
+static int is_valid_path(char *path, char* cmd)
+{
+	if (cmd && (ft_strncmp(cmd, "/", 1) == 0 || ft_strncmp(cmd, "./", 2) == 0
+		|| ft_strncmp(cmd, "../", 3) == 0))
+	{
+		if (access(cmd, F_OK) != 0)
+		{
+			ft_fprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd,
+				strerror(errno));
+			return (127);
+		}
+		if (access(cmd, X_OK) != 0)
+		{
+			ft_fprintf(STDERR_FILENO, "minishell: %s: %s\n", cmd,
+				strerror(errno));
+			return (126);
+		}
+		return (-1);
+	}
+	else
+		if (access(path, F_OK) == 0)
+			return (-1);
+	return (0);
+}
 char	*find_path(char *pathname, char *cmd)
 {
 	char	**sp_path;
 	char	*path;
 	int		i;
+	int		res;
 
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
@@ -59,7 +103,8 @@ char	*find_path(char *pathname, char *cmd)
 	while (sp_path[i])
 	{
 		path = join_path_and_cmd(sp_path[i], cmd);
-		if (path && access(path, X_OK) == 0)
+		res = is_valid_path(path, cmd);
+		if (res != 0)
 			break ;
 		free(path);
 		path = NULL;
@@ -69,5 +114,8 @@ char	*find_path(char *pathname, char *cmd)
 	while (sp_path[i])
 		free(sp_path[i++]);
 	free(sp_path);
+	if (res > 0)
+		exit(res);
 	return (path);
 }
+

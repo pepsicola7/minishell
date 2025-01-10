@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   add_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:48:19 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/09 16:30:08 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:42:23 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ int	add_node(t_env **env, t_env *nw, int ret)
 		{
 			ft_fprintf(2, "minishell: export: `%s=%s': not a valid identifier\n",
 				nw->name, nw->value);
-			free(nw);
-			return (1);
+			return (free(nw->name), free(nw->value), free(nw), 1);
 		}
 	}
 	i = env_edit(env, nw);

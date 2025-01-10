@@ -14,10 +14,8 @@
 
 int	pipeline(t_exe *exe, t_parser *cmds, t_env **env)
 {
-	int	i;
 	int prev_pipefd = -1;
 
-	i = exe->index_pid;
 	while (cmds && (cmds->cmd || cmds->redirections))
 	{
 		while (cmds && cmds->redirections && !cmds->cmd)
@@ -39,14 +37,14 @@ int	pipeline(t_exe *exe, t_parser *cmds, t_env **env)
 				if (pipe(exe->pipefd) == -1)
 					perror("Erreur lors de la création du pipe");
 			}
-			exe->pid[i] = fork(); // sauvgarder le pid pour waitpit() a la fin;
-			if (exe->pid[i] == -1)
+			exe->pid[exe->index_pid] = fork(); // sauvgarder le pid pour waitpit() a la fin;
+			if (exe->pid[exe->index_pid] == -1)
 			{
 				free(exe->pid);
 				perror("Erreur du fork");
 				return (-1);
 			}
-			if (exe->pid[i] == 0) // processus enfant
+			if (exe->pid[exe->index_pid] == 0) // processus enfant
 			{
 				exc_solo_cmd(exe, cmds, env);
 				if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
@@ -90,7 +88,6 @@ int	pipeline(t_exe *exe, t_parser *cmds, t_env **env)
 	{
 		while (waitpid(exe->pid[j], &status, 0) < 0)
 			;
-		ft_fprintf(2, "val %d\n", WEXITSTATUS(status));
 		j++;
 	}
 	exit_code = 0;
@@ -114,6 +111,7 @@ int	executor(t_env **env, t_parser *cmds)
 
 	exit_code = 0;
 	exe = NULL;
+	// print_parser(cmds);
 	// print_env(env);
 	// if this is a bulltin solo; (&& cmds->next == NULL && cmds->prev == NULL)
 	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL && cmds->num_redirections == 0)

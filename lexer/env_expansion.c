@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:45:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/04 18:16:31 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/10 18:18:40 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ char	*get_env_value(char *var_name, t_env *env)
 {
 	char	*value;
 
+	// if (!ft_strncmp(var_name, "?", 1))
+	// 	value = ft_strjoin(ft_getenv("?", env), var_name + 1);
+	// else
 	value = ft_getenv(var_name, env);
 	if (value == NULL)
 		value = "";

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2025/01/09 19:23:45 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:27:13 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int	exec_commande(t_exe *exe, t_parser *cmds, t_env **env)
 	{
 		if (cmds->builtin)
 			exit(cmds->builtin(env, cmds));
-		exc_pathname = find_path(exe->pathname, cmds->cmd[0]);
+		exc_pathname = check_path(exe, cmds);
 		if (!exc_pathname)
 		{
-			ft_fprintf(2, "%s: command not found	\n", cmds->cmd[0]);
-			exit(EXIT_FAILURE);
+			ft_fprintf(2, "%s: command not found\n", cmds->cmd[0]);
+			exit(127);
 		}
 		setup_signals(1);
 		if (execve(exc_pathname, cmds->cmd, exe->env) == -1)

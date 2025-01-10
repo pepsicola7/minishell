@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
+#    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 15:18:00 by tbartocc          #+#    #+#              #
-#    Updated: 2025/01/09 18:13:21 by tbartocc         ###   ########.fr        #
+#    Updated: 2025/01/10 14:01:59 by peli             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ $(NAME): $(OBJ)
 
 clean:
 	@rm -f $(OBJ)
+	@find . -type d -name '*.o' -exec rm -rf {} + # Suppression des dossiers .o
 	@$(MAKE) --no-print-directory -C $(LIBFT) clean
 
 fclean: clean
@@ -69,4 +70,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re debug tester
+.PHONY: all clean fclean re
