@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/23 11:07:26 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/23 11:38:47 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ t_parser	*create_cmd(void);
 int			(*get_builtin_function(char *cmd))(t_env **, t_parser *);
 void		handle_command(t_parser **current_cmd, t_lexer *tokens);
 t_lexer		*handle_redirection(t_parser **current_cmd, t_lexer *tokens);
-int			handle_pipe_p(t_parser **parser, t_parser **cmd, t_lexer *tokens, t_env **env);
+int			handle_pipe_p(t_parser **a, t_parser **b, t_lexer *c, t_env **d);
 int			is_builtin(char *cmd);
 t_parser	*parse_lexer(t_lexer *tokens, t_env **env);
 
@@ -145,7 +145,7 @@ char		*get_pathname(t_env *env_lst);
 char		*find_path(char *pathname, char *cmd);
 char		**trans_env(t_env	*env_lst);
 char		*check_path(t_exe *exe, t_parser *cmd);
-int			pipeline(t_exe *exe, t_parser *cmds,  t_env **env);
+int			pipeline(t_exe *exe, t_parser *cmds, t_env **env);
 int			exec_commande(t_exe *exe, t_parser *cmds, t_env **env);
 int			handle_redir(t_exe *exe, t_parser *cmds);
 void		exc_solo_cmd(t_exe *exe, t_parser *cmds, t_env **env);
