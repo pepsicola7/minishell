@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:35:59 by peli              #+#    #+#             */
-/*   Updated: 2025/01/23 09:36:26 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/23 10:37:24 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ char	*get_pathname(t_env *env_lst)
 			return (env_lst->value);
 		env_lst = env_lst->next;
 	}
-	return (NULL); //retourne NULL ou -1?
+	return (NULL);
 }
 
 t_exe	*init_exe_second(t_env *env, t_exe *exe, int *exit_code)
 {
-	exe->fd[0] = STDIN_FILENO; // Input;
-	exe->fd[1] = STDOUT_FILENO; // Output;
+	exe->fd[0] = STDIN_FILENO;
+	exe->fd[1] = STDOUT_FILENO;
 	exe->pipefd[0] = -1;
 	exe->pipefd[1] = -1;
 	exe->index_pid = 0;
@@ -37,7 +37,7 @@ t_exe	*init_exe_second(t_env *env, t_exe *exe, int *exit_code)
 		perror("Erreur lors de la conversion de l'environnement");
 		return (NULL);
 	}
-	exe->pathname = get_pathname(env);//need to ft_calloc;
+	exe->pathname = get_pathname(env);
 	if (!exe->pathname)
 	{
 		free(exe->env);
@@ -51,24 +51,14 @@ t_exe	*init_exe_second(t_env *env, t_exe *exe, int *exit_code)
 
 t_exe	*init_exe(t_env *env, t_parser *cmds, int *exit_code)
 {
-	t_exe	*exe;
+	t_exe		*exe;
 	t_parser	*cmd_temps;
-	int		count;
+	int			count;
 
-	if (!cmds)
-	{
-		perror("la liste de commandes est vide");
-		return (NULL);
-	}
 	exe = ft_calloc(1, sizeof(t_exe));
-	if (!exe)
-	{
-		perror("Erreur d'allocation memoire pour exe");
-		return (NULL);
-	}
 	cmd_temps = cmds;
 	count = 0;
-	while (cmd_temps)// 	while (cmd_temps && cmd_temps->cmd) je le change pour fixer : < test | echo hello
+	while (cmd_temps)
 	{
 		count++;
 		cmd_temps = cmd_temps->next;
@@ -85,5 +75,5 @@ t_exe	*init_exe(t_env *env, t_parser *cmds, int *exit_code)
 			return (NULL);
 		}
 	}
-	return(exe);
+	return (exe);
 }

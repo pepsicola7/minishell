@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/23 09:51:59 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/23 11:07:26 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,4 +154,5 @@ int			open_input_redirection(t_lexer *redirection);
 int			open_output_redirection(t_lexer *redirection);
 void		pipex(t_exe *exe);
 char		*join_path_and_cmd(const char *dir, const char *cmd);
+int			handle_waitpid(t_exe *exe);
 #endif

@@ -1,107 +1,103 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.c                                          :+:      :+:    :+:   */
+/*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 15:58:04 by peli              #+#    #+#             */
-/*   Updated: 2025/01/03 17:32:41 by peli             ###   ########.fr       */
+/*   Created: 2025/01/23 11:09:05 by peli              #+#    #+#             */
+/*   Updated: 2025/01/23 11:11:06 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
 
+int	handle_redirection_solo(t_exe *exe, t_parser **cmds, int *prev_pipefd)
+{
+	while (*cmds && (*cmds)->redirections && !(*cmds)->cmd)
+	{
+		if (handle_redir_solo(exe, *cmds) == -1)
+			perror("Erreur d'exécution de la redirection");
+		if ((*cmds)->prev && (*cmds)->prev->cmd)
+		{
+			if (*prev_pipefd != STDIN_FILENO)
+				close(*prev_pipefd);
+		}
+		*cmds = (*cmds)->next;
+		exe->nmb_cmd -= 1;
+	}
+	return (0);
+}
+
+int	create_pipe_and_fork(t_exe *exe, t_parser *cmds)
+{
+	if (cmds->next)
+	{
+		if (pipe(exe->pipefd) == -1)
+		{
+			perror("Erreur lors de la création du pipe");
+			return (-1);
+		}
+	}
+	exe->pid[exe->index_pid] = fork();
+	if (exe->pid[exe->index_pid] == -1)
+	{
+		free(exe->pid);
+		perror("Erreur du fork");
+		return (-1);
+	}
+	return (0);
+}
+
+void	handle_child(t_exe *exe, t_parser *cmds, t_env **env, int *prev_pipefd)
+{
+	if (exe->pid[exe->index_pid] == 0)
+	{
+		exc_solo_cmd(exe, cmds, env);
+		if (cmds->prev && cmds->prev->cmd)
+		{
+			if (*prev_pipefd != STDIN_FILENO)
+			{
+				if (dup2(*prev_pipefd, STDIN_FILENO) == -1)
+					perror("Erreur dup2");
+				close(*prev_pipefd);
+			}
+		}
+		if (handle_redir(exe, cmds) == -1)
+			exit(1);
+		pipex(exe);
+		exec_commande(exe, cmds, env);
+		perror("Erreur d'exécution de la commande");
+		exit(1);
+	}
+}
+
 int	pipeline(t_exe *exe, t_parser *cmds, t_env **env)
 {
-	int prev_pipefd = -1;
+	int	prev_pipefd;
 
+	prev_pipefd = -1;
+	if (!cmds || (!cmds->cmd && !cmds->redirections))
+		return (0);
+	handle_redirection_solo(exe, &cmds, &prev_pipefd);
 	while (cmds && (cmds->cmd || cmds->redirections))
 	{
-		while (cmds && cmds->redirections && !cmds->cmd)
+		if (create_pipe_and_fork(exe, cmds) == -1)
+			return (-1);
+		handle_child(exe, cmds, env, &prev_pipefd);
+		if (cmds->next)
 		{
-			if (handle_redir_solo(exe, cmds) == -1)
-				perror("Erreur d'exécution de la redirection");
-			if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
-			{
-				if (prev_pipefd != STDIN_FILENO)
-					close(prev_pipefd);
-			}
-			cmds = cmds->next;
-			exe->nmb_cmd -= 1;
+			close(exe->pipefd[1]);
+			close(prev_pipefd);
+			prev_pipefd = exe->pipefd[0];
 		}
-		if (cmds && cmds->cmd)
-		{
-			if (cmds->next)
-			{
-				if (pipe(exe->pipefd) == -1)
-					perror("Erreur lors de la création du pipe");
-			}
-			exe->pid[exe->index_pid] = fork(); // sauvgarder le pid pour waitpit() a la fin;
-			if (exe->pid[exe->index_pid] == -1)
-			{
-				free(exe->pid);
-				perror("Erreur du fork");
-				return (-1);
-			}
-			if (exe->pid[exe->index_pid] == 0) // processus enfant
-			{
-				exc_solo_cmd(exe, cmds, env);
-				if (cmds->prev && cmds->prev->cmd) //not the first cmd, envoyer la sortie a l'entree
-				{
-					if (prev_pipefd != STDIN_FILENO)
-					{
-						if (dup2(prev_pipefd, STDIN_FILENO) == -1)
-							perror("Erreur dup2");
-						close(prev_pipefd);
-					}
-				}
-				if (handle_redir(exe, cmds) == -1)
-					exit (1);
-				// printf("le pipefd[0] : %d le pipefd[1] = %d\n", exe->pipefd[0], exe->pipefd[1]);
-				pipex(exe);
-				exec_commande(exe, cmds, env);
-				perror("Erreur d'exécution de la commande");
-				exit(1);
-			}
-			if (cmds && cmds->next) // not the last cmd;
-			{
-					close(exe->pipefd[1]);
-					close(prev_pipefd);
-					prev_pipefd = exe->pipefd[0];
-			}
-			exe->nmb_cmd -= 1;
-			cmds = cmds->next;
-			exe->index_pid++;
-		}
+		exe->nmb_cmd -= 1;
+		cmds = cmds->next;
+		exe->index_pid++;
 	}
-	if (prev_pipefd != -1) // not the first cmd;
+	if (prev_pipefd != -1)
 		close(prev_pipefd);
-	
-	// WAIT
-	int	status;
-	int	signal_number;
-	int	exit_code;
-
-	int j = 0;
-	while(j < exe->index_pid)
-	{
-		while (waitpid(exe->pid[j], &status, 0) < 0)
-			;
-		j++;
-	}
-	exit_code = 0;
-	if (WIFEXITED(status))
-		exit_code = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-	{
-		signal_number = WTERMSIG(status);
-		exit_code = 128 + signal_number;
-		if (signal_number == SIGQUIT)
-			ft_putstr_fd("Quit (core dumped)", 2);
-		ft_putstr_fd("\n", 2);
-	}
-	return (exit_code);
+	return (handle_waitpid(exe));
 }
 
 int	executor(t_env **env, t_parser *cmds)
@@ -111,12 +107,10 @@ int	executor(t_env **env, t_parser *cmds)
 
 	exit_code = 0;
 	exe = NULL;
-	// print_parser(cmds);
-	// print_env(env);
-	// if this is a bulltin solo; (&& cmds->next == NULL && cmds->prev == NULL)
-	if (cmds->builtin != 0 && cmds->next == NULL && cmds->prev == NULL && cmds->num_redirections == 0)
+	if (cmds->builtin != 0 && cmds->next == NULL
+		&& cmds->prev == NULL && cmds->num_redirections == 0)
 	{
-		if ( cmds->builtin(env, cmds) == 1)
+		if (cmds->builtin(env, cmds) == 1)
 			return (1);
 		return (0);
 	}
