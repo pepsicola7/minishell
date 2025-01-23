@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:55:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 16:45:53 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/21 17:57:25 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	signal_handler(int signum)
 {
 	g_signum = signum;
 	if (signum == SIGINT)
-    	close(STDIN_FILENO);
+		close(STDIN_FILENO);
 }
 
 void	setup_signals(int in_child)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_fprintf.c                                        :+:      :+:    :+:   */
+/*   ft_fprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/23 20:25:36 by peli              #+#    #+#             */
-/*   Updated: 2025/01/07 18:05:02 by tbartocc         ###   ########.fr       */
+/*   Created: 2025/01/21 17:52:48 by peli              #+#    #+#             */
+/*   Updated: 2025/01/21 17:52:50 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,11 @@ int	ft_format(int fd, char c, va_list args)
 	else if (c == 'u')
 		count += ft_putnbr_u(fd, va_arg(args, unsigned int));
 	else if (c == 'x')
-		count += ft_putnbr_hexa(fd, va_arg(args, unsigned int), "0123456789abcdef");
+		count += ft_putnbr_hexa(
+				fd, va_arg(args, unsigned int), "0123456789abcdef");
 	else if (c == 'X')
-		count += ft_putnbr_hexa(fd, va_arg(args, unsigned int), "0123456789ABCDEF");
+		count += ft_putnbr_hexa(
+				fd, va_arg(args, unsigned int), "0123456789ABCDEF");
 	else if (c == '%')
 		count += ft_putchar_(fd, '%');
 	return (count);

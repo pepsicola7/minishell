@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/10 17:42:35 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/21 17:56:05 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,26 @@ int	my_export(t_env **env, t_parser *parser)
 {
 	int		i;
 	int		len_equal;
-	char	*name;
-	char	*value;
+	char	*n;
+	char	*v;
 
 	if (!parser->cmd || !parser->cmd[1])
 		return (print_export(*env), add_node(env, ft_new_node("?", "0"), 1), 1);
 	i = -1;
 	len_equal = ft_strlen_c(parser->cmd[1], '=');
 	if (len_equal == 0)
-		return (ft_fprintf(2, "minishell: export: `=': not a valid identifier\n"), 
-				add_node(env, ft_new_node("?", "1"), 1), 1);
-	name = ft_strndup(parser->cmd[1], len_equal);
-	value = ft_strdup(parser->cmd[1] + len_equal + 1);
+		return (ft_fprintf(2, "minishell: export: `=': not a valid"
+				" identifier\n"), add_node(env, ft_new_node("?", "1"), 1), 1);
+	n = ft_strndup(parser->cmd[1], len_equal);
+	v = ft_strdup(parser->cmd[1] + len_equal + 1);
 	while (parser->cmd[1][++i] != '=' && parser->cmd[1][i] != '\0')
 		if (ft_isalnum(parser->cmd[1][i]) == 1 && parser->cmd[1][i] == '_')
-			return (add_node(env, ft_new_node("?", "1"), 1), free(name), free(value), 1);
-	if (add_node(env, ft_new_node(name, value), 0) == 0)
-		return (add_node(env, ft_new_node("?", "0"), 1), free(name), free(value), 0);
+			return (add_node(env, ft_new_node("?", "1"), 1),
+				free(n), free(v), 1);
+	if (add_node(env, ft_new_node(n, v), 0) == 0)
+		return (add_node(env, ft_new_node("?", "0"), 1), free(n), free(v), 0);
 	else
-		return (add_node(env, ft_new_node("?", "1"), 1), free(name), free(value), 1);
+		return (add_node(env, ft_new_node("?", "1"), 1), free(n), free(v), 1);
 }
 
 char	*get_value(char *name, t_env *env)

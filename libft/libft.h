@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:57:26 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 17:37:00 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/21 17:51:54 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,6 @@ int		ft_putnbr_hexa(int fd, unsigned long long n, char *base);
 int		ft_putstr_(int fd, char *s);
 int		ft_put_p(int fd, unsigned long long n);
 int		ft_format(int fd, char c, va_list args);
+char	*ft_nextstr(char **nextstr_ptr);
 
 #endif

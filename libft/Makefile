@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+         #
+#    By: peli <peli@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/05 14:34:27 by tbartocc          #+#    #+#              #
-#    Updated: 2025/01/08 15:44:29 by tbartocc         ###   ########.fr        #
+#    Updated: 2025/01/21 17:47:27 by peli             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,8 @@ SRC =	ft_atoi.c \
 	ft_tolower.c \
 	ft_toupper.c \
 	ft_fonction.c \
-	get_next_line_OLD.c
+	get_next_line_OLD.c \
+	get_next_line_OLD_2.c
 
 INCLUDE = includes
 HEADER = $(INCLUDE)/ft.h

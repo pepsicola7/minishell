@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:35:56 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/04 18:08:49 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/21 17:54:34 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	free_cmds(t_parser *cmds)
 			}
 			free(tmp->cmd);
 		}
-		// free(tmp->hd_file_name);
 		free_tokens(tmp->redirections);
 		free(tmp);
 	}
@@ -63,13 +62,14 @@ void	free_tokens(t_lexer *tokens)
 		free(tmp);
 	}
 }
+
 void	free_array(char	**str)
 {
 	int	i;
 
 	i = 0;
 	if (!str)
-		return;
+		return ;
 	while (str[i])
 	{
 		free(str[i]);
@@ -81,7 +81,7 @@ void	free_array(char	**str)
 
 void	free_exe(t_exe *exe)
 {
-	free_array(exe->env);
+	ft_free_tab(exe->env);
 	free(exe->pid);
 	free(exe);
 }

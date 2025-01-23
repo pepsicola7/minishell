@@ -6,19 +6,19 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 17:50:01 by peli              #+#    #+#             */
-/*   Updated: 2025/01/08 17:18:24 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/23 09:44:45 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
 
-int open_input_redirection(t_lexer *redirection)
+int	open_input_redirection(t_lexer *redirection)
 {
-	int old_fd = open(redirection->value, O_RDONLY);
+	int	old_fd;
 
+	old_fd = open(redirection->value, O_RDONLY);
 	if (redirection->type == HEREDOC)
 		unlink(redirection->value);
-
 	if (old_fd == -1)
 	{
 		perror("Erreur d'ouverture du fichier d'entree");
@@ -28,17 +28,16 @@ int open_input_redirection(t_lexer *redirection)
 	return (0);
 }
 
-int open_output_redirection(t_lexer *redirection)
+int	open_output_redirection(t_lexer *redirection)
 {
-	int old_fd;
+	int	old_fd;
 
-	if (redirection->type == REDIR_OUT) // >
+	if (redirection->type == REDIR_OUT)
 		old_fd = open(redirection->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (redirection->type == APPEND) // >>
+	else if (redirection->type == APPEND)
 		old_fd = open(redirection->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		return (0);
-
 	if (old_fd == -1)
 	{
 		perror("Erreur d'ouverture du fichier de sortie");
@@ -48,9 +47,9 @@ int open_output_redirection(t_lexer *redirection)
 	return (0);
 }
 
-int handle_redir_solo(t_exe *exe, t_parser *cmds)
+int	handle_redir_solo(t_exe *exe, t_parser *cmds)
 {
-	t_lexer *redirection;
+	t_lexer	*redirection;
 
 	(void)exe;
 	redirection = cmds->redirections;

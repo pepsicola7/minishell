@@ -6,24 +6,11 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 13:45:21 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/10 18:18:40 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/21 17:59:29 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
-
-void	print_env(t_env *env)
-{
-	t_env *tmp;
-
-	tmp = env;
-	printf("%s=%s\n", tmp->name, tmp->value);
-	while (tmp && tmp->next)
-	{
-		tmp = tmp->next;
-		printf("%s=%s\n", tmp->name, tmp->value);
-	}
-}
 
 char	*ft_getenv(char *var_name, t_env *env)
 {
@@ -40,9 +27,6 @@ char	*get_env_value(char *var_name, t_env *env)
 {
 	char	*value;
 
-	// if (!ft_strncmp(var_name, "?", 1))
-	// 	value = ft_strjoin(ft_getenv("?", env), var_name + 1);
-	// else
 	value = ft_getenv(var_name, env);
 	if (value == NULL)
 		value = "";
@@ -51,13 +35,11 @@ char	*get_env_value(char *var_name, t_env *env)
 
 void	extract_var_name(const char *input, int *i, char *var_name)
 {
-	// int	start;
 	int	j;
 
-	// start = *i;
 	j = 0;
 	while (input[*i] && (ft_isalnum(input[*i])
-		|| input[*i] == '_' || input[*i] == '?'))
+			|| input[*i] == '_' || input[*i] == '?'))
 	{
 		if (j < 127)
 			var_name[j++] = input[(*i)++];
@@ -90,7 +72,7 @@ char	*replace_env_variables(const char *input, t_env *env)
 	while (input[i])
 	{
 		if (input[i] == '$' && (ft_isalnum(input[i + 1])
-			|| input[i + 1] == '_' || input[i + 1] == '?'))
+				|| input[i + 1] == '_' || input[i + 1] == '?'))
 		{
 			i++;
 			extract_var_name(input, &i, var_name);

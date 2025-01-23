@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 16:11:44 by tbartocc          #+#    #+#             */
-/*   Updated: 2024/11/26 14:12:39 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/21 17:48:47 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,5 @@ void	ft_print_tab(char **map)
 
 	i = -1;
 	while (map && map[++i])
-	{
 		printf("%d, %s\n", i, map[i]);
-		// ft_putstr_n(map[i]);
-	}
 }

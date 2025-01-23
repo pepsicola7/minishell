@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/09 17:37:01 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/21 17:55:06 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,5 @@ int	my_cd(t_env **env, t_parser *parser)
 	add_node(env, ft_new_node("PWD", temp), 0);
 	free(temp);
 	add_node(env, ft_new_node("?", "0"), 1);
-	// free(temp);
 	return (0);
 }

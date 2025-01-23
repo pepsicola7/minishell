@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:48:19 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/10 17:42:23 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/21 17:53:42 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ int	add_node(t_env **env, t_env *nw, int ret)
 		if ((i == 0 && ft_isdigit(nw->name[i])) || (!ft_isalnum(nw->name[i])
 				&& nw->name[i] != '_'))
 		{
-			ft_fprintf(2, "minishell: export: `%s=%s': not a valid identifier\n",
-				nw->name, nw->value);
+			ft_fprintf(2, "minishell: export: `%s=%s': not a valid"
+				" identifier\n", nw->name, nw->value);
 			return (free(nw->name), free(nw->value), free(nw), 1);
 		}
 	}

@@ -6,27 +6,11 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 16:34:50 by peli              #+#    #+#             */
-/*   Updated: 2025/01/10 16:35:41 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/23 10:32:04 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../src.h"
-
-char	*ft_strcpy_(char *dest, const char *src)
-{
-	int	i;
-
-	i = 0;
-	if (!dest || !src)
-		return (NULL);
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
 
 char	*join_path_and_cmd(const char *dir, const char *cmd)
 {
@@ -60,10 +44,10 @@ char	*check_path(t_exe *exe, t_parser *cmds)
 	return (res);
 }
 
-static int is_valid_path(char *path, char* cmd)
+static int	is_valid_path(char *path, char *cmd)
 {
 	if (cmd && (ft_strncmp(cmd, "/", 1) == 0 || ft_strncmp(cmd, "./", 2) == 0
-		|| ft_strncmp(cmd, "../", 3) == 0))
+			|| ft_strncmp(cmd, "../", 3) == 0))
 	{
 		if (access(cmd, F_OK) != 0)
 		{
@@ -84,32 +68,11 @@ static int is_valid_path(char *path, char* cmd)
 			return (-1);
 	return (0);
 }
-char	*find_path(char *pathname, char *cmd)
-{
-	char	**sp_path;
-	char	*path;
-	int		i;
-	int		res;
 
-	if (access(cmd, X_OK) == 0)
-		return (cmd);
-	if (pathname == NULL)
-		return (NULL);
-	sp_path = ft_split(pathname, ':');
-	if (!sp_path)
-		return (NULL);
-	path = NULL;
-	i = 0;
-	while (sp_path[i])
-	{
-		path = join_path_and_cmd(sp_path[i], cmd);
-		res = is_valid_path(path, cmd);
-		if (res != 0)
-			break ;
-		free(path);
-		path = NULL;
-		i++;
-	}
+char	*clean_up_and_exit(char **sp_path, int res, char *path)
+{
+	int	i;
+
 	i = 0;
 	while (sp_path[i])
 		free(sp_path[i++]);
@@ -119,3 +82,28 @@ char	*find_path(char *pathname, char *cmd)
 	return (path);
 }
 
+char	*find_path(char *pathname, char *cmd)
+{
+	char	**sp_path;
+	char	*path;
+	int		i;
+	int		res;
+
+	i = 0;
+	res = 0;
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	sp_path = ft_split(pathname, ':');
+	if (!pathname || !sp_path)
+		return (NULL);
+	while (sp_path[i])
+	{
+		path = join_path_and_cmd(sp_path[i], cmd);
+		res = is_valid_path(path, cmd);
+		if (res != 0)
+			return (clean_up_and_exit(sp_path, res, path));
+		free(path);
+		i++;
+	}
+	return (clean_up_and_exit(sp_path, 0, NULL));
+}

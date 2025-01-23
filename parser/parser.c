@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 19:22:06 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/09 16:41:48 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:00:55 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ t_parser	*create_cmd(void)
 	cmd->cmd = NULL;
 	cmd->builtin = NULL;
 	cmd->num_redirections = 0;
-	// cmd->hd_file_name = NULL;
 	cmd->redirections = NULL;
 	cmd->next = NULL;
 	cmd->prev = NULL;

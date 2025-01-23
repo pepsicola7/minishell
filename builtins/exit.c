@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/09 19:30:18 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/21 17:55:45 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ static void	check_exit_code(struct s_parser *parser)
 		if (i == 0 && !ft_isdigit(parser->cmd[1][i])
 			&& parser->cmd[1][i] != '-' && parser->cmd[1][i] != '+')
 		{
-			ft_fprintf(2, "minishell: exit: %s: numeric argument required\n"
-				, parser->cmd[1]);
+			ft_fprintf(2, "minishell: exit: %s: numeric argument required\n",
+				parser->cmd[1]);
 			exit(2);
 		}
 		else if (i != 0 && !ft_isdigit(parser->cmd[1][i]))
 		{
-			ft_fprintf(2, "minishell: exit: %s: numeric argument required\n"
-				, parser->cmd[1]);
+			ft_fprintf(2, "minishell: exit: %s: numeric argument required\n",
+				parser->cmd[1]);
 			exit(2);
 		}
 		i++;
@@ -40,9 +40,8 @@ int	my_exit(t_env **env, struct s_parser *parser)
 {
 	int		exit_code;
 	char	*str;
-	
+
 	printf("exit\n");
-	// (void)env;
 	exit_code = 0;
 	check_exit_code(parser);
 	if (parser->cmd[1] && !parser->cmd[2])
@@ -61,7 +60,6 @@ int	my_exit(t_env **env, struct s_parser *parser)
 	str = ft_itoa(exit_code);
 	add_node(env, ft_new_node("?", str), 1);
 	free(str);
-	// print_env(env);
 	exit(exit_code);
 	return (exit_code);
 }

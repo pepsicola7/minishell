@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:19:59 by peli              #+#    #+#             */
-/*   Updated: 2025/01/19 15:50:05 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/23 09:27:05 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	exec_commande(t_exe *exe, t_parser *cmds, t_env **env)
 		if (!exc_pathname)
 		{
 			ft_fprintf(2, "%s: command not found\n", cmds->cmd[0]);
+			free_exe(exe);
 			exit(127);
 		}
 		setup_signals(1);
@@ -38,11 +39,8 @@ void	exc_solo_cmd(t_exe *exe, t_parser *cmds, t_env **env)
 	if (!cmds->prev && !cmds->next)
 	{
 		if (handle_redir(exe, cmds) == -1)
-		{	
-			// perror("Erreur d'exécution de la redirection");
 			exit(EXIT_FAILURE);
-		}
-		if (exe->fd[1] != STDOUT_FILENO) // passer les redirs;
+		if (exe->fd[1] != STDOUT_FILENO)
 		{
 			dup2(exe->fd[1], STDOUT_FILENO);
 			close(exe->fd[1]);
@@ -58,5 +56,3 @@ void	exc_solo_cmd(t_exe *exe, t_parser *cmds, t_env **env)
 	}
 	return ;
 }
-
-

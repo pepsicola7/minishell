@@ -6,7 +6,7 @@
 /*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 18:35:59 by peli              #+#    #+#             */
-/*   Updated: 2025/01/10 14:03:58 by peli             ###   ########.fr       */
+/*   Updated: 2025/01/23 09:36:26 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,6 @@ t_exe	*init_exe_second(t_env *env, t_exe *exe, int *exit_code)
 		return (NULL);
 	}
 	(void)exit_code;
-	// exe->fd[0] = STDIN_FILENO; // Input;
-	// exe->fd[1] = STDOUT_FILENO; // Output;
-	// exe->pipefd[0] = -1;
-	// exe->pipefd[1] = -1;
-	// exe->index_pid = 0;
 	return (exe);
 }
 

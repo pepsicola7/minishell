@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_cases.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 17:41:31 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/09 16:42:28 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:00:46 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_lexer	*handle_redirection(t_parser **current_cmd, t_lexer *tokens)
 	return (tokens->next);
 }
 
-int	handle_pipe_p(t_parser **parser, t_parser **cmd, t_lexer *tokens, t_env **env)
+int	handle_pipe_p(
+	t_parser **parser, t_parser **cmd, t_lexer *tokens, t_env **env)
 {
 	if (tokens->next == NULL || tokens->next->type == PIPE)
 	{

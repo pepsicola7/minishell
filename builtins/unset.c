@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tbartocc <tbartocc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: peli <peli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 18:11:58 by tbartocc          #+#    #+#             */
-/*   Updated: 2025/01/08 19:14:18 by tbartocc         ###   ########.fr       */
+/*   Updated: 2025/01/21 17:56:20 by peli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	my_unset(t_env **env, t_parser *parser)
 	i = 1;
 	while (tmp && parser->cmd[i])
 	{
-		if (ft_strcmp(parser->cmd[i], tmp->name) == 0 && ft_strcmp(parser->cmd[i],
-				"?") != 0)
+		if (ft_strcmp(parser->cmd[i], tmp->name) == 0
+			&& ft_strcmp(parser->cmd[i], "?") != 0)
 		{
 			if (remove_elem(env, &last, &tmp))
 				continue ;
